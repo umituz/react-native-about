@@ -127,11 +127,9 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({
 
   // Get gradient colors from theme if available
   const getGradient = (key: string) => {
-    if (
-      theme?.colors?.settingGradients?.[key] &&
-      Array.isArray(theme.colors.settingGradients[key])
-    ) {
-      return theme.colors.settingGradients[key] as unknown as string[];
+    const gradients = theme?.colors?.settingGradients as Record<string, [string, string]> | undefined;
+    if (gradients && gradients[key] && Array.isArray(gradients[key])) {
+      return gradients[key] as unknown as string[];
     }
     // Default gradients
     const defaults: Record<string, string[]> = {

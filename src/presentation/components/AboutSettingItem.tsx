@@ -9,14 +9,14 @@ import { LinearGradient } from "expo-linear-gradient";
 import {
   AtomicText,
   AtomicIcon,
-  type AtomicIconName,
   type DesignTokens,
 } from "@umituz/react-native-design-system";
+import type { IconName } from "@umituz/react-native-icon";
 import { useAppDesignTokens } from "@umituz/react-native-design-system-theme";
 
 interface AboutSettingItemProps {
   /** Icon name from Lucide library */
-  icon: AtomicIconName;
+  icon: IconName;
   /** Main title text */
   title: string;
   /** Optional description text */
@@ -125,7 +125,7 @@ export const AboutSettingItem: React.FC<AboutSettingItemProps> = ({
             <AtomicIcon
               name="ChevronRight"
               size="sm"
-              color="textSecondary"
+              color="secondary"
               style={styles.chevron}
             />
           </View>
@@ -225,17 +225,17 @@ const getStyles = (tokens: DesignTokens) =>
       minWidth: 0, // Allows text to shrink
     },
     title: {
-      fontSize: tokens.typography.bodyLarge.fontSize,
+      fontSize: tokens.typography.bodyLarge.fontSize ?? 16,
       fontWeight: "600",
       flexShrink: 1,
-      lineHeight: tokens.typography.bodyLarge.fontSize * 1.4,
+      lineHeight: (tokens.typography.bodyLarge.fontSize ?? 16) * 1.4,
     },
     description: {
-      fontSize: tokens.typography.bodySmall.fontSize,
+      fontSize: tokens.typography.bodySmall.fontSize ?? 14,
       marginTop: tokens.spacing.xs / 2,
       opacity: 0.7,
       flexShrink: 1,
-      lineHeight: tokens.typography.bodySmall.fontSize * 1.4,
+      lineHeight: (tokens.typography.bodySmall.fontSize ?? 14) * 1.4,
     },
     rightContainer: {
       justifyContent: "center",
@@ -246,7 +246,7 @@ const getStyles = (tokens: DesignTokens) =>
     },
     value: {
       fontWeight: "500",
-      lineHeight: tokens.typography.bodyMedium.fontSize * 1.4,
+      lineHeight: (tokens.typography.bodyMedium.fontSize ?? 16) * 1.4,
     },
     chevron: {
       opacity: 0.5,
