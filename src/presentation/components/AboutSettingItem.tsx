@@ -11,7 +11,7 @@ import {
   AtomicIcon,
   type DesignTokens,
 } from "@umituz/react-native-design-system";
-import type { IconName } from "@umituz/react-native-icon";
+import type { IconName } from "@umituz/react-native-design-system-atoms";
 import { useAppDesignTokens } from "@umituz/react-native-design-system-theme";
 
 interface AboutSettingItemProps {
