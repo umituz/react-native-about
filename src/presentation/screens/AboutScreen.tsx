@@ -14,7 +14,7 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { useLocalization } from "@umituz/react-native-localization";
-import { useTheme, useAppDesignTokens } from "@umituz/react-native-design-system-theme";
+import { useAppDesignTokens } from "@umituz/react-native-design-system-theme";
 import { AtomicText, ScreenLayout } from "@umituz/react-native-design-system";
 import { AboutSettingItem } from "../components/AboutSettingItem";
 import { useAboutInfo } from "../hooks/useAboutInfo";
@@ -99,7 +99,6 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({
   navigation,
   ...rest
 }) => {
-  const { theme } = useTheme();
   const { t } = useLocalization();
   const tokens = useAppDesignTokens();
   const styles = getStyles(tokens);
@@ -125,9 +124,9 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({
     showContactEmail !== false && !!appInfo.contactEmail;
   const shouldShowWebsite = showWebsite !== false && !!appInfo.websiteUrl;
 
-  // Get gradient colors from theme if available
+  // Get gradient colors from tokens if available, otherwise use defaults
   const getGradient = (key: string) => {
-    const gradients = theme?.colors?.settingGradients as Record<string, [string, string]> | undefined;
+    const gradients = (tokens.colors as any)?.settingGradients as Record<string, [string, string]> | undefined;
     if (gradients && gradients[key] && Array.isArray(gradients[key])) {
       return gradients[key] as unknown as string[];
     }
