@@ -14,13 +14,13 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { useLocalization } from "@umituz/react-native-localization";
-import { useAppDesignTokens } from "@umituz/react-native-design-system-theme";
-import { AtomicText, ScreenLayout } from "@umituz/react-native-design-system";
+import { useAppDesignTokens, type DesignTokens } from "@umituz/react-native-design-system-theme";
+import { AtomicText } from "@umituz/react-native-design-system-atoms";
+import { ScreenLayout } from "@umituz/react-native-design-system";
 import { AboutSettingItem } from "../components/AboutSettingItem";
 import { useAboutInfo } from "../hooks/useAboutInfo";
 import { AboutRepository } from "../../infrastructure/repositories/AboutRepository";
 import type { AppInfo } from "../../domain/entities/AppInfo";
-import type { DesignTokens } from "@umituz/react-native-design-system";
 
 export interface AboutScreenProps {
   /**

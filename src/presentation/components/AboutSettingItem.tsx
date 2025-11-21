@@ -6,13 +6,9 @@
 import React from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import {
-  AtomicText,
-  AtomicIcon,
-  type DesignTokens,
-} from "@umituz/react-native-design-system";
+import { AtomicText, AtomicIcon } from "@umituz/react-native-design-system-atoms";
+import { useAppDesignTokens, type DesignTokens } from "@umituz/react-native-design-system-theme";
 import type { IconName } from "@umituz/react-native-design-system-atoms";
-import { useAppDesignTokens } from "@umituz/react-native-design-system-theme";
 
 interface AboutSettingItemProps {
   /** Icon name from Lucide library */
