@@ -16,7 +16,7 @@ import { View, StyleSheet } from "react-native";
 import { useLocalization } from "@umituz/react-native-localization";
 import { useAppDesignTokens, type DesignTokens } from "@umituz/react-native-design-system-theme";
 import { AtomicText } from "@umituz/react-native-design-system-atoms";
-import { ScreenLayout } from "@umituz/react-native-design-system";
+import { ScreenLayout } from "@umituz/react-native-design-system-organisms";
 import { AboutSettingItem } from "../components/AboutSettingItem";
 import { useAboutInfo } from "../hooks/useAboutInfo";
 import { AboutRepository } from "../../infrastructure/repositories/AboutRepository";
