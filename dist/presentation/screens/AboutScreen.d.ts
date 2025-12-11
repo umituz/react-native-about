@@ -1,65 +1,29 @@
 /**
  * About Screen Component
- * Modern about screen with Material Design 3 compliance
- *
- * Features:
- * - App version, contact, and developer information
- * - Beautiful gradient icons
- * - Section-based layout
- * - Fully customizable
- *
- * Based on flashcard_maker implementation pattern
+ * Main screen component for displaying app information
+ * Fully configurable and generic
  */
-import React from "react";
-import type { AppInfo } from "../../domain/entities/AppInfo";
+import React from 'react';
+import { ViewStyle } from 'react-native';
+import { AboutConfig } from '../../domain/entities/AppInfo';
 export interface AboutScreenProps {
-    /**
-     * App information (optional - will use Constants.expoConfig if not provided)
-     */
-    appInfo?: Partial<AppInfo>;
-    /**
-     * Custom section header text for app info section
-     */
-    appInfoSectionTitle?: string;
-    /**
-     * Custom section header text for contact section
-     */
-    contactSectionTitle?: string;
-    /**
-     * Custom title text
-     */
-    title?: string;
-    /**
-     * Custom description text
-     */
-    description?: string;
-    /**
-     * Custom translation keys prefix (default: "about")
-     */
-    translationKeyPrefix?: string;
-    /**
-     * Show app version (default: true)
-     */
-    showVersion?: boolean;
-    /**
-     * Show more apps link (default: true if moreAppsUrl is provided)
-     */
-    showMoreApps?: boolean;
-    /**
-     * Show contact email (default: true if contactEmail is provided)
-     */
-    showContactEmail?: boolean;
-    /**
-     * Show website link (default: true if websiteUrl is provided)
-     */
-    showWebsite?: boolean;
-    /**
-     * Test ID for E2E testing
-     */
+    /** Configuration for the about screen */
+    config: AboutConfig;
+    /** Custom container style */
+    containerStyle?: ViewStyle;
+    /** Custom header style */
+    headerStyle?: ViewStyle;
+    /** Custom title style */
+    titleStyle?: ViewStyle;
+    /** Custom version style */
+    versionStyle?: ViewStyle;
+    /** Show app header with name and version */
+    showHeader?: boolean;
+    /** Custom header component */
+    headerComponent?: React.ReactNode;
+    /** Custom footer component */
+    footerComponent?: React.ReactNode;
+    /** Test ID for E2E testing */
     testID?: string;
-    /**
-     * Navigation prop (optional - for React Navigation compatibility)
-     */
-    navigation?: any;
 }
 export declare const AboutScreen: React.FC<AboutScreenProps>;

@@ -1,36 +1,89 @@
 /**
- * About Info Hook
- * Provides access to app information and contact methods
- *
- * USAGE:
- * ```typescript
- * const { appInfo, openContactEmail, openWebsite, openMoreApps } = useAboutInfo();
- * ```
+ * Hook for managing About information
+ * Provides reactive state management for About data
  */
-import { useCallback } from 'react';
-import { Linking } from 'react-native';
-export const useAboutInfo = (props) => {
-    const { appInfo } = props;
-    // Contact openers
-    const openContactEmail = useCallback(() => {
-        if (appInfo.contactEmail) {
-            Linking.openURL(`mailto:${appInfo.contactEmail}`);
+import { useState, useEffect, useCallback } from 'react';
+import { AboutRepository } from '../../infrastructure/repositories/AboutRepository';
+export const useAboutInfo = (options = {}) => {
+    const { initialConfig, autoInit = false } = options;
+    const [repository] = useState(() => new AboutRepository());
+    const [appInfo, setAppInfo] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const initialize = useCallback(async (config) => {
+        setLoading(true);
+        setError(null);
+        try {
+            const defaultAppInfo = {
+                name: config.appInfo.name || '',
+                version: config.appInfo.version || '1.0.0',
+                description: config.appInfo.description,
+                developer: config.appInfo.developer,
+                contactEmail: config.appInfo.contactEmail,
+                websiteUrl: config.appInfo.websiteUrl,
+                websiteDisplay: config.appInfo.websiteDisplay,
+                moreAppsUrl: config.appInfo.moreAppsUrl,
+                privacyPolicyUrl: config.appInfo.privacyPolicyUrl,
+                termsOfServiceUrl: config.appInfo.termsOfServiceUrl,
+            };
+            await repository.saveAppInfo(defaultAppInfo);
+            setAppInfo(defaultAppInfo);
+            if (__DEV__) {
+                console.log('useAboutInfo: Initialized with config', config);
+            }
         }
-    }, [appInfo.contactEmail]);
-    const openWebsite = useCallback(() => {
-        if (appInfo.websiteUrl) {
-            Linking.openURL(appInfo.websiteUrl);
+        catch (err) {
+            const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+            setError(errorMessage);
+            if (__DEV__) {
+                console.error('useAboutInfo: Initialization failed', err);
+            }
         }
-    }, [appInfo.websiteUrl]);
-    const openMoreApps = useCallback(() => {
-        if (appInfo.moreAppsUrl) {
-            Linking.openURL(appInfo.moreAppsUrl);
+        finally {
+            setLoading(false);
         }
-    }, [appInfo.moreAppsUrl]);
+    }, [repository]);
+    const updateAppInfo = useCallback(async (updates) => {
+        if (!appInfo) {
+            setError('App info not initialized');
+            return;
+        }
+        setLoading(true);
+        setError(null);
+        try {
+            const updatedInfo = await repository.updateAppInfo(updates);
+            setAppInfo(updatedInfo);
+            if (__DEV__) {
+                console.log('useAboutInfo: Updated app info', updates);
+            }
+        }
+        catch (err) {
+            const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+            setError(errorMessage);
+            if (__DEV__) {
+                console.error('useAboutInfo: Update failed', err);
+            }
+        }
+        finally {
+            setLoading(false);
+        }
+    }, [repository, appInfo]);
+    const reset = useCallback(() => {
+        setAppInfo(null);
+        setError(null);
+        setLoading(false);
+    }, []);
+    useEffect(() => {
+        if (autoInit && initialConfig) {
+            initialize(initialConfig);
+        }
+    }, [autoInit, initialConfig, initialize]);
     return {
         appInfo,
-        openContactEmail,
-        openWebsite,
-        openMoreApps,
+        loading,
+        error,
+        initialize,
+        updateAppInfo,
+        reset,
     };
 };

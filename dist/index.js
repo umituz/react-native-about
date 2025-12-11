@@ -5,57 +5,49 @@
  * ❌ NO app-specific code
  * ✅ FULLY configurable and dynamic
  *
- * @version 1.6.0
+ * @version 1.7.0
  */
-/**
- * Main About functionality - FULLY DYNAMIC
- * All behavior controlled by config and props from parent app
- */
+// Infrastructure exports
+export { AboutRepository } from './infrastructure/repositories/AboutRepository';
+// Presentation exports
+export { AboutSettingItem } from './presentation/components/AboutSettingItem';
+export { AboutHeader } from './presentation/components/AboutHeader';
+export { AboutContent } from './presentation/components/AboutContent';
+export { AboutScreen } from './presentation/screens/AboutScreen';
+export { useAboutInfo } from './presentation/hooks/useAboutInfo';
+// Utility exports
+export * from './utils';
+// Legacy exports for backward compatibility
 export const About = {
-    /**
-     * Initialize with app-specific configuration
-     * NO hardcoded values - everything comes from config
-     */
     init: (config) => {
-        // Dynamic initialization based on parent app config
-        console.log('About initialized with dynamic config:', config);
+        if (__DEV__) {
+            console.log('About initialized with dynamic config:', config);
+        }
         return { success: true, config };
     },
-    /**
-     * Execute functionality with dynamic props
-     * Behavior changes based on props from parent app
-     */
     execute: (props) => {
-        // Dynamic execution based on props
         return {
             success: true,
             data: props,
             timestamp: new Date().toISOString()
         };
     },
-    /**
-     * Get about information from config
-     */
     getInfo: (config) => {
         return {
-            appName: config.appName || 'Unknown App',
-            version: config.appVersion || '1.0.0',
-            description: config.appDescription || '',
-            developer: config.developerName || '',
-            email: config.developerEmail || '',
-            website: config.website || '',
-            privacyPolicy: config.privacyPolicy || '',
-            termsOfService: config.termsOfService || ''
+            appName: config.appInfo.name || 'Unknown App',
+            version: config.appInfo.version || '1.0.0',
+            description: config.appInfo.description || '',
+            developer: config.appInfo.developer || '',
+            email: config.appInfo.contactEmail || '',
+            website: config.appInfo.websiteUrl || '',
+            privacyPolicy: config.appInfo.privacyPolicyUrl || '',
+            termsOfService: config.appInfo.termsOfServiceUrl || ''
         };
     },
-    /**
-     * Update configuration at runtime
-     * Supports dynamic changes from parent app
-     */
     updateConfig: (newConfig) => {
-        // Dynamic configuration update
+        if (__DEV__) {
+            console.log('About config updated:', newConfig);
+        }
         return { success: true, updated: newConfig };
     }
 };
-// Export utilities for dynamic usage
-export * from './utils';

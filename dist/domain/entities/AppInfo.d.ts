@@ -1,9 +1,7 @@
 /**
- * App Info Entity
- * Represents application metadata and contact information
- *
- * Domain Entity - Pure business logic, no dependencies
- * Part of About Domain (separate from Legal Domain)
+ * Domain Entity - Application Information
+ * Pure business logic, no external dependencies
+ * Part of About Domain
  */
 export interface AppInfo {
     /** Application name */
@@ -20,6 +18,41 @@ export interface AppInfo {
     websiteUrl?: string;
     /** Website display text */
     websiteDisplay?: string;
-    /** More apps URL (App Store/Play Store developer page) */
+    /** More apps URL */
     moreAppsUrl?: string;
+    /** Privacy policy URL */
+    privacyPolicyUrl?: string;
+    /** Terms of service URL */
+    termsOfServiceUrl?: string;
+}
+/**
+ * Configuration interface for About component
+ * Fully configurable by parent application
+ */
+export interface AboutConfig {
+    /** Application information */
+    appInfo: Partial<AppInfo>;
+    /** Custom theme colors */
+    theme?: {
+        primary?: string;
+        secondary?: string;
+        background?: string;
+        text?: string;
+        border?: string;
+    };
+    /** Custom styling options */
+    style?: {
+        containerStyle?: Record<string, unknown>;
+        itemStyle?: Record<string, unknown>;
+        textStyle?: Record<string, unknown>;
+        iconStyle?: Record<string, unknown>;
+    };
+    /** Custom actions */
+    actions?: {
+        onWebsitePress?: () => void;
+        onEmailPress?: () => void;
+        onPrivacyPress?: () => void;
+        onTermsPress?: () => void;
+        onMoreAppsPress?: () => void;
+    };
 }

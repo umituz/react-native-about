@@ -1,25 +1,22 @@
-/**
- * About Info Hook
- * Provides access to app information and contact methods
- *
- * USAGE:
- * ```typescript
- * const { appInfo, openContactEmail, openWebsite, openMoreApps } = useAboutInfo();
- * ```
- */
-import { AppInfo } from '../../domain/entities/AppInfo';
+import { AppInfo, AboutConfig } from '../../domain/entities/AppInfo';
+export interface UseAboutInfoOptions {
+    /** Initial configuration */
+    initialConfig?: AboutConfig;
+    /** Auto-initialize on mount */
+    autoInit?: boolean;
+}
 export interface UseAboutInfoReturn {
-    /** App metadata and contact information */
-    appInfo: AppInfo;
-    /** Open contact email */
-    openContactEmail: () => void;
-    /** Open website */
-    openWebsite: () => void;
-    /** Open more apps URL */
-    openMoreApps: () => void;
+    /** Current app info */
+    appInfo: AppInfo | null;
+    /** Loading state */
+    loading: boolean;
+    /** Error state */
+    error: string | null;
+    /** Initialize with config */
+    initialize: (config: AboutConfig) => Promise<void>;
+    /** Update app info */
+    updateAppInfo: (updates: Partial<AppInfo>) => Promise<void>;
+    /** Reset to initial state */
+    reset: () => void;
 }
-export interface UseAboutInfoProps {
-    /** App information */
-    appInfo: AppInfo;
-}
-export declare const useAboutInfo: (props: UseAboutInfoProps) => UseAboutInfoReturn;
+export declare const useAboutInfo: (options?: UseAboutInfoOptions) => UseAboutInfoReturn;

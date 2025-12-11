@@ -1,13 +1,12 @@
 /**
- * About Repository Implementation
- * Provides access to app information
- *
- * Infrastructure Layer - Implementation of domain interface
+ * Repository implementation for About data
+ * Handles data persistence and retrieval
  */
-import { IAboutRepository } from '../../domain/repositories/IAboutRepository';
 import { AppInfo } from '../../domain/entities/AppInfo';
+import { IAboutRepository } from '../../domain/repositories/IAboutRepository';
 export declare class AboutRepository implements IAboutRepository {
     private appInfo;
-    constructor(appInfo?: Partial<AppInfo>);
-    getAppInfo(): AppInfo;
+    getAppInfo(): Promise<AppInfo>;
+    saveAppInfo(appInfo: AppInfo): Promise<void>;
+    updateAppInfo(updates: Partial<AppInfo>): Promise<AppInfo>;
 }
