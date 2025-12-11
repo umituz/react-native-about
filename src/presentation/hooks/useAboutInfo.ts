@@ -1,8 +1,9 @@
 /**
  * Hook for managing About information
  * Provides reactive state management for About data
+ * Optimized for performance and memory safety
  */
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { AppInfo, AboutConfig } from '../../domain/entities/AppInfo';
 import { AboutRepository } from '../../infrastructure/repositories/AboutRepository';
 
@@ -36,8 +37,22 @@ export const useAboutInfo = (
   const [appInfo, setAppInfo] = useState<AppInfo | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // Prevent infinite loops and memory leaks
+  const isInitializedRef = useRef(false);
+  const isMountedRef = useRef(true);
 
   const initialize = useCallback(async (config: AboutConfig) => {
+    // Prevent multiple initializations
+    if (isInitializedRef.current) {
+      return;
+    }
+    
+    // Check if component is still mounted
+    if (!isMountedRef.current) {
+      return;
+    }
+    
     setLoading(true);
     setError(null);
     
@@ -56,12 +71,21 @@ export const useAboutInfo = (
       };
       
       await repository.saveAppInfo(defaultAppInfo);
-      setAppInfo(defaultAppInfo);
+      
+      // Only update state if component is still mounted
+      if (isMountedRef.current) {
+        setAppInfo(defaultAppInfo);
+        isInitializedRef.current = true;
+      }
       
       if (__DEV__) {
         console.log('useAboutInfo: Initialized with config', config);
       }
     } catch (err) {
+      if (!isMountedRef.current) {
+        return;
+      }
+      
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(errorMessage);
       
@@ -69,13 +93,18 @@ export const useAboutInfo = (
         console.error('useAboutInfo: Initialization failed', err);
       }
     } finally {
-      setLoading(false);
+      // Only update loading state if component is still mounted
+      if (isMountedRef.current) {
+        setLoading(false);
+      }
     }
   }, [repository]);
 
   const updateAppInfo = useCallback(async (updates: Partial<AppInfo>) => {
-    if (!appInfo) {
-      setError('App info not initialized');
+    if (!appInfo || !isMountedRef.current) {
+      if (isMountedRef.current) {
+        setError('App info not initialized');
+      }
       return;
     }
     
@@ -84,12 +113,20 @@ export const useAboutInfo = (
     
     try {
       const updatedInfo = await repository.updateAppInfo(updates);
-      setAppInfo(updatedInfo);
+      
+      // Only update state if component is still mounted
+      if (isMountedRef.current) {
+        setAppInfo(updatedInfo);
+      }
       
       if (__DEV__) {
         console.log('useAboutInfo: Updated app info', updates);
       }
     } catch (err) {
+      if (!isMountedRef.current) {
+        return;
+      }
+      
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(errorMessage);
       
@@ -97,18 +134,39 @@ export const useAboutInfo = (
         console.error('useAboutInfo: Update failed', err);
       }
     } finally {
-      setLoading(false);
+      // Only update loading state if component is still mounted
+      if (isMountedRef.current) {
+        setLoading(false);
+      }
     }
   }, [repository, appInfo]);
 
   const reset = useCallback(() => {
+    if (!isMountedRef.current) {
+      return;
+    }
+    
     setAppInfo(null);
     setError(null);
     setLoading(false);
+    isInitializedRef.current = false;
   }, []);
 
+  // Cleanup on unmount to prevent memory leaks
   useEffect(() => {
-    if (autoInit && initialConfig) {
+    return () => {
+      isMountedRef.current = false;
+      
+      // Cleanup repository if it has destroy method
+      if (repository && typeof repository.destroy === 'function') {
+        repository.destroy();
+      }
+    };
+  }, [repository]);
+
+  // Auto-initialize with dependency optimization
+  useEffect(() => {
+    if (autoInit && initialConfig && !isInitializedRef.current && isMountedRef.current) {
       initialize(initialConfig);
     }
   }, [autoInit, initialConfig, initialize]);

@@ -2,8 +2,9 @@
  * About Setting Item Component
  * Reusable setting item for about screen
  * Fully configurable and generic
+ * Optimized for performance and memory safety
  */
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
 import {
   TouchableOpacity,
   View,
@@ -60,21 +61,59 @@ export const AboutSettingItem: React.FC<AboutSettingItemProps> = ({
   testID,
   chevronColor = '#666',
 }) => {
-  const Container: React.ComponentType<React.ComponentProps<typeof TouchableOpacity | typeof View>> = onPress ? TouchableOpacity : View;
-  
-  return (
-    <Container
-      style={[styles.container, disabled && styles.disabled, containerStyle]}
-      onPress={onPress}
-      disabled={disabled}
-      testID={testID}
-    >
-      {icon && (
-        <View style={[styles.iconContainer, iconContainerStyle]}>
-          {icon}
-        </View>
-      )}
-      
+  // Memoize container type to prevent unnecessary re-renders
+  const Container = useMemo(() => {
+    return onPress ? TouchableOpacity : View;
+  }, [onPress]) as React.ComponentType<React.ComponentProps<typeof TouchableOpacity | typeof View>>;
+
+  // Memoize container styles
+  const containerStyles = useMemo(() => {
+    return [
+      styles.container,
+      disabled && styles.disabled,
+      containerStyle
+    ];
+  }, [disabled, containerStyle]);
+
+  // Memoize icon container styles
+  const iconContainerStyles = useMemo(() => {
+    return [
+      styles.iconContainer,
+      iconContainerStyle
+    ];
+  }, [iconContainerStyle]);
+
+  // Memoize chevron styles
+  const chevronStyles = useMemo(() => {
+    return [
+      styles.chevron,
+      { color: chevronColor }
+    ];
+  }, [chevronColor]);
+
+  // Memoize press handler to prevent unnecessary re-renders
+  const handlePress = useCallback(() => {
+    if (onPress && !disabled) {
+      onPress();
+    }
+  }, [onPress, disabled]);
+
+  // Memoize icon rendering
+  const renderIcon = useMemo(() => {
+    if (!icon) {
+      return null;
+    }
+
+    return (
+      <View style={iconContainerStyles}>
+        {icon}
+      </View>
+    );
+  }, [icon, iconContainerStyles]);
+
+  // Memoize content rendering
+  const renderContent = useMemo(() => {
+    return (
       <View style={styles.content}>
         <Text style={[styles.title, titleStyle]}>{title}</Text>
         {description && (
@@ -83,14 +122,42 @@ export const AboutSettingItem: React.FC<AboutSettingItemProps> = ({
           </Text>
         )}
       </View>
-      
-      {value && (
-        <Text style={[styles.value, valueStyle]}>{value}</Text>
-      )}
-      
-      {showChevron && (
-        <Text style={[styles.chevron, { color: chevronColor }]}>›</Text>
-      )}
+    );
+  }, [title, description, titleStyle, descriptionStyle]);
+
+  // Memoize value rendering
+  const renderValue = useMemo(() => {
+    if (!value) {
+      return null;
+    }
+
+    return (
+      <Text style={[styles.value, valueStyle]}>{value}</Text>
+    );
+  }, [value, valueStyle]);
+
+  // Memoize chevron rendering
+  const renderChevron = useMemo(() => {
+    if (!showChevron) {
+      return null;
+    }
+
+    return (
+      <Text style={chevronStyles}>›</Text>
+    );
+  }, [showChevron, chevronStyles]);
+
+  return (
+    <Container
+      style={containerStyles}
+      onPress={handlePress}
+      disabled={disabled}
+      testID={testID}
+    >
+      {renderIcon}
+      {renderContent}
+      {renderValue}
+      {renderChevron}
     </Container>
   );
 };

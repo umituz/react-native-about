@@ -2,8 +2,9 @@
  * About Screen Component
  * Main screen component for displaying app information
  * Fully configurable and generic
+ * Optimized for performance and memory safety
  */
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
 import {
   View,
   Text,
@@ -48,47 +49,18 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({
   footerComponent,
   testID,
 }) => {
-  const { appInfo, loading, error, initialize } = useAboutInfo({
+  const { appInfo, loading, error } = useAboutInfo({
     autoInit: true,
     initialConfig: config,
   });
 
-  React.useEffect(() => {
-    if (config && !appInfo && !loading && !error) {
-      initialize(config);
-    }
-  }, [config, appInfo, loading, error, initialize]);
-
-  if (loading) {
-    return (
-      <View style={[styles.container, containerStyle]}>
-        <Text style={styles.loadingText}>Loading...</Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={[styles.container, containerStyle]}>
-        <Text style={styles.errorText}>Error: {error}</Text>
-      </View>
-    );
-  }
-
-  if (!appInfo) {
-    return (
-      <View style={[styles.container, containerStyle]}>
-        <Text style={styles.errorText}>No app information available</Text>
-      </View>
-    );
-  }
-
-  const renderHeader = () => {
+  // Memoize header rendering to prevent unnecessary re-renders
+  const renderHeader = useCallback(() => {
     if (headerComponent) {
       return headerComponent;
     }
 
-    if (!showHeader) {
+    if (!showHeader || !appInfo) {
       return null;
     }
 
@@ -100,25 +72,72 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({
         versionStyle={versionStyle}
       />
     );
-  };
+  }, [headerComponent, showHeader, appInfo, headerStyle, titleStyle, versionStyle]);
 
-  return (
-    <ScrollView 
-      style={[styles.container, containerStyle]}
-      testID={testID}
-    >
-      {renderHeader()}
-      
+  // Memoize footer rendering
+  const renderFooter = useCallback(() => {
+    if (!footerComponent) {
+      return null;
+    }
+
+    return (
+      <View style={styles.footer}>
+        {footerComponent}
+      </View>
+    );
+  }, [footerComponent]);
+
+  // Memoize content rendering
+  const renderContent = useCallback(() => {
+    if (!appInfo) {
+      return null;
+    }
+
+    return (
       <AboutContent
         appInfo={appInfo}
         config={config}
       />
-      
-      {footerComponent && (
-        <View style={styles.footer}>
-          {footerComponent}
-        </View>
-      )}
+    );
+  }, [appInfo, config]);
+
+  // Memoize container style to prevent unnecessary re-renders
+  const containerStyles = useMemo(() => {
+    return [styles.container, containerStyle];
+  }, [containerStyle]);
+
+  if (loading) {
+    return (
+      <View style={containerStyles}>
+        <Text style={styles.loadingText}>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={containerStyles}>
+        <Text style={styles.errorText}>Error: {error}</Text>
+      </View>
+    );
+  }
+
+  if (!appInfo) {
+    return (
+      <View style={containerStyles}>
+        <Text style={styles.errorText}>No app information available</Text>
+      </View>
+    );
+  }
+
+  return (
+    <ScrollView 
+      style={containerStyles}
+      testID={testID}
+    >
+      {renderHeader()}
+      {renderContent()}
+      {renderFooter()}
     </ScrollView>
   );
 };
