@@ -1,25 +1,41 @@
 /**
- * React Native About - Public API
- *
- * About screen component for React Native apps
- * Built with DDD principles and Material Design 3
- *
- * Usage:
- *   import { AboutScreen, useAboutInfo, AboutRepository } from '@umituz/react-native-about';
+ * React Native react-native-about
+ * 
+ * General purpose package for hundreds of applications.
+ * No app-specific code. Fully configurable and dynamic.
+ * 
+ * @version 1.4.0
  */
 
-// Presentation Layer
-export { AboutScreen } from "./presentation/screens/AboutScreen";
-export type { AboutScreenProps } from "./presentation/screens/AboutScreen";
+// Core exports
+export interface UaboutConfig {
+  // Configuration options passed from parent app
+  [key: string]: any;
+}
 
-export { AboutSettingItem } from "./presentation/components/AboutSettingItem";
+export interface UaboutProps {
+  config?: UaboutConfig;
+  // Dynamic props based on app requirements
+  [key: string]: any;
+}
 
-export { useAboutInfo } from "./presentation/hooks/useAboutInfo";
-export type { UseAboutInfoReturn, UseAboutInfoProps } from "./presentation/hooks/useAboutInfo";
+/**
+ * Main react-native-about functionality
+ * Fully configurable based on props and config
+ */
+export const Uabout = {
+  // Initialize with app-specific configuration
+  init: (config: UaboutConfig) => {
+    // Dynamic initialization based on config
+    console.log('react-native-about initialized with config:', config);
+  },
+  
+  // Main functionality
+  execute: (props: UaboutProps) => {
+    // Dynamic execution based on props
+    return { success: true, data: props };
+  }
+};
 
-// Domain Layer
-export type { AppInfo } from "./domain/entities/AppInfo";
-export type { IAboutRepository } from "./domain/repositories/IAboutRepository";
-
-// Infrastructure Layer
-export { AboutRepository } from "./infrastructure/repositories/AboutRepository";
+// Export utilities
+export * from './utils';

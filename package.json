@@ -1,62 +1,39 @@
 {
-  "name": "@umituz/react-native-about",
-  "version": "1.2.2",
-  "description": "About screen component for React Native apps - Display app information, version, and legal links",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "name": "react-native-about",
+  "version": "1.5.0",
+  "description": "React Native react-native-about - General purpose package for hundreds of apps",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
   "scripts": {
-    "typecheck": "tsc --noEmit",
-    "lint": "tsc --noEmit",
-    "version:patch": "npm version patch -m 'chore: release v%s'",
-    "version:minor": "npm version minor -m 'chore: release v%s'",
-    "version:major": "npm version major -m 'chore: release v%s'"
+    "build": "tsc",
+    "type-check": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "react-native",
-    "about",
-    "about-screen",
-    "app-info",
-    "version",
-    "legal",
-    "terms",
-    "privacy",
-    "ddd",
-    "domain-driven-design",
-    "type-safe",
-    "solid",
-    "dry",
-    "kiss"
+    "react-native-about",
+    "general-purpose",
+    "reusable"
   ],
-  "author": "Ümit UZ <umit@umituz.com>",
+  "author": "",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/umituz/react-native-about.git"
-  },
-  "peerDependencies": {
-    "react": ">=18.2.0",
-    "react-native": ">=0.74.0",
-    "@umituz/react-native-design-system": "*",
-    "@umituz/react-native-design-system-theme": "*",
-    "@umituz/react-native-design-system-atoms": "*",
-    "@umituz/react-native-design-system-organisms": "*",
-    "@umituz/react-native-localization": "*",
-    "react-native-safe-area-context": "^4.0.0",
-    "expo-linear-gradient": "*",
-    "expo-constants": "*"
+    "url": "https://github.com/umituz/react-native-packages.git",
+    "directory": "packages/react-native-about"
   },
   "devDependencies": {
-    "@types/react": "^18.2.45",
-    "@types/react-native": "^0.73.0",
-    "react": "^18.2.0",
-    "react-native": "^0.74.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-native": "^0.72.0"
   },
-  "publishConfig": {
-    "access": "public"
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-native": ">=0.70.0"
   },
   "files": [
-    "src",
+    "src/",
+    "dist/",
     "README.md",
     "LICENSE"
   ]
