@@ -1,7 +1,7 @@
 {
   "name": "react-native-about",
-  "version": "1.5.0",
-  "description": "React Native react-native-about - General purpose package for hundreds of apps",
+  "version": "1.6.0",
+  "description": "React Native About - General purpose package for hundreds of applications",
   "main": "src/index.ts",
   "types": "src/index.ts",
   "scripts": {
@@ -11,21 +11,19 @@
   },
   "keywords": [
     "react-native",
-    "react-native-about",
+    "about",
     "general-purpose",
-    "reusable"
+    "reusable",
+    "dynamic"
   ],
   "author": "",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/umituz/react-native-packages.git",
-    "directory": "packages/react-native-about"
+    "url": "https://github.com/umituz/react-native-about.git"
   },
   "devDependencies": {
-    "typescript": "^5.0.0",
-    "@types/react": "^18.0.0",
-    "@types/react-native": "^0.72.0"
+    "typescript": "^5.0.0"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
