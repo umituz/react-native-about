@@ -5,53 +5,41 @@
  * ❌ NO app-specific code
  * ✅ FULLY configurable and dynamic
  * 
- * @version 1.6.0
+ * @version 1.7.0
  */
 
-// Core configuration interface
-export interface AboutConfig {
-  // Configuration passed from parent app
-  appName?: string;
-  appVersion?: string;
-  appDescription?: string;
-  developerName?: string;
-  developerEmail?: string;
-  website?: string;
-  privacyPolicy?: string;
-  termsOfService?: string;
-  // All other configuration is dynamic
-  [key: string]: any;
-}
+// Domain exports
+export type { AppInfo, AboutConfig } from './domain/entities/AppInfo';
+export type { IAboutRepository } from './domain/repositories/IAboutRepository';
 
-// Dynamic props interface
-export interface AboutProps {
-  config?: AboutConfig;
-  children?: React.ReactNode;
-  // All other props are dynamic based on app needs
-  [key: string]: any;
-}
+// Infrastructure exports
+export { AboutRepository } from './infrastructure/repositories/AboutRepository';
 
-/**
- * Main About functionality - FULLY DYNAMIC
- * All behavior controlled by config and props from parent app
- */
+// Presentation exports
+export { AboutSettingItem } from './presentation/components/AboutSettingItem';
+export { AboutHeader } from './presentation/components/AboutHeader';
+export { AboutContent } from './presentation/components/AboutContent';
+export { AboutScreen } from './presentation/screens/AboutScreen';
+export type { AboutSettingItemProps } from './presentation/components/AboutSettingItem';
+export type { AboutHeaderProps } from './presentation/components/AboutHeader';
+export type { AboutContentProps } from './presentation/components/AboutContent';
+export type { AboutScreenProps } from './presentation/screens/AboutScreen';
+export { useAboutInfo } from './presentation/hooks/useAboutInfo';
+export type { UseAboutInfoOptions, UseAboutInfoReturn } from './presentation/hooks/useAboutInfo';
+
+// Utility exports
+export * from './utils';
+
+// Legacy exports for backward compatibility
 export const About = {
-  /**
-   * Initialize with app-specific configuration
-   * NO hardcoded values - everything comes from config
-   */
-  init: (config: AboutConfig) => {
-    // Dynamic initialization based on parent app config
-    console.log('About initialized with dynamic config:', config);
+  init: (config: import('./domain/entities/AppInfo').AboutConfig) => {
+    if (__DEV__) {
+      console.log('About initialized with dynamic config:', config);
+    }
     return { success: true, config };
   },
   
-  /**
-   * Execute functionality with dynamic props
-   * Behavior changes based on props from parent app
-   */
-  execute: (props: AboutProps) => {
-    // Dynamic execution based on props
+  execute: (props: Record<string, unknown>) => {
     return { 
       success: true, 
       data: props,
@@ -59,31 +47,23 @@ export const About = {
     };
   },
   
-  /**
-   * Get about information from config
-   */
-  getInfo: (config: AboutConfig) => {
+  getInfo: (config: import('./domain/entities/AppInfo').AboutConfig) => {
     return {
-      appName: config.appName || 'Unknown App',
-      version: config.appVersion || '1.0.0',
-      description: config.appDescription || '',
-      developer: config.developerName || '',
-      email: config.developerEmail || '',
-      website: config.website || '',
-      privacyPolicy: config.privacyPolicy || '',
-      termsOfService: config.termsOfService || ''
+      appName: config.appInfo.name || 'Unknown App',
+      version: config.appInfo.version || '1.0.0',
+      description: config.appInfo.description || '',
+      developer: config.appInfo.developer || '',
+      email: config.appInfo.contactEmail || '',
+      website: config.appInfo.websiteUrl || '',
+      privacyPolicy: config.appInfo.privacyPolicyUrl || '',
+      termsOfService: config.appInfo.termsOfServiceUrl || ''
     };
   },
   
-  /**
-   * Update configuration at runtime
-   * Supports dynamic changes from parent app
-   */
-  updateConfig: (newConfig: Partial<AboutConfig>) => {
-    // Dynamic configuration update
+  updateConfig: (newConfig: Partial<import('./domain/entities/AppInfo').AboutConfig>) => {
+    if (__DEV__) {
+      console.log('About config updated:', newConfig);
+    }
     return { success: true, updated: newConfig };
   }
 };
-
-// Export utilities for dynamic usage
-export * from './utils';

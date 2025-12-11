@@ -1,12 +1,13 @@
 {
   "name": "react-native-about",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "React Native About - General purpose package for hundreds of applications",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "type-check": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx --fix",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
@@ -23,6 +24,13 @@
     "url": "https://github.com/umituz/react-native-about.git"
   },
   "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-native": "^0.70.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "eslint-plugin-react": "^7.33.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "typescript": "^5.0.0"
   },
   "peerDependencies": {
