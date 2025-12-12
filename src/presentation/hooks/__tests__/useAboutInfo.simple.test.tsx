@@ -1,7 +1,7 @@
 /**
  * Simple test for useAboutInfo hook
  */
-import { renderHook } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import { useAboutInfo } from '../useAboutInfo';
 import { AppInfo, AboutConfig } from '../../domain/entities/AppInfo';
 
@@ -52,8 +52,13 @@ describe('useAboutInfo', () => {
     expect(result.current.error).toBeNull();
   });
 
-  it('should initialize with config', () => {
+  it('should initialize with config', async () => {
     const { result } = renderHook(() => useAboutInfo({ initialConfig: mockConfig }));
+
+    await act(async () => {
+      // Wait for any async initialization
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
 
     expect(result.current.appInfo).toEqual(mockAppInfo);
     expect(result.current.loading).toBe(false);
@@ -78,7 +83,9 @@ describe('useAboutInfo', () => {
 
     expect(result.current.appInfo).toBeNull();
 
-    await result.current.initialize(mockConfig);
+    await act(async () => {
+      await result.current.initialize(mockConfig);
+    });
 
     expect(result.current.appInfo).toEqual(mockAppInfo);
   });
@@ -94,7 +101,9 @@ describe('useAboutInfo', () => {
       },
     };
 
-    await result.current.update(updatedConfig);
+    await act(async () => {
+      await result.current.update(updatedConfig);
+    });
 
     expect(result.current.appInfo.name).toBe('Updated App');
   });
@@ -104,7 +113,9 @@ describe('useAboutInfo', () => {
 
     expect(result.current.appInfo).toEqual(mockAppInfo);
 
-    result.current.reset();
+    act(() => {
+      result.current.reset();
+    });
 
     expect(result.current.appInfo).toBeNull();
     expect(result.current.loading).toBe(false);
@@ -120,7 +131,9 @@ describe('useAboutInfo', () => {
 
     const initialAppInfo = result.current.appInfo;
 
-    await result.current.refresh();
+    await act(async () => {
+      await result.current.refresh();
+    });
 
     // Should still have app info after refresh
     expect(result.current.appInfo).toBeTruthy();
@@ -141,7 +154,9 @@ describe('useAboutInfo', () => {
   it('should handle errors during update', async () => {
     const { result } = renderHook(() => useAboutInfo({ initialConfig: mockConfig }));
 
-    await result.current.update(null as any);
+    await act(async () => {
+      await result.current.update(null as any);
+    });
 
     expect(result.current.error).toBeTruthy();
   });
@@ -168,10 +183,12 @@ describe('useAboutInfo', () => {
     unmount();
 
     // Should not crash when updating after unmount
-    try {
-      await result.current.update(mockConfig);
-    } catch (error) {
-      // Expected to not crash
-    }
+    await act(async () => {
+      try {
+        await result.current.update(mockConfig);
+      } catch (error) {
+        // Expected to not crash
+      }
+    });
   });
 });

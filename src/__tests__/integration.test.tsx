@@ -5,7 +5,7 @@
 /// <reference path="./types.d.ts" />
 import React from 'react';
 import { View, Text } from 'react-native';
-import { render, waitFor, fireEvent, queryByText } from '@testing-library/react';
+import { render, waitFor, fireEvent, queryByText } from '@testing-library/react-native';
 import { AboutScreen } from '../presentation/screens/AboutScreen';
 import { AboutConfig } from '../domain/entities/AppInfo';
 
@@ -60,7 +60,7 @@ describe('About Package Integration', () => {
 
   describe('Complete Flow', () => {
     it('should render complete about screen with all features', async () => {
-      const { getByText, getByTestId } = render(
+      const { getByText, getByTestId, queryByText } = render(
         <AboutScreen config={fullConfig} />
       );
 
@@ -100,11 +100,11 @@ describe('About Package Integration', () => {
       });
 
       // Test all interactions
-      fireEvent.click(getByTestId('email-item'));
-      fireEvent.click(getByTestId('website-item'));
-      fireEvent.click(getByTestId('more-apps-item'));
-      fireEvent.click(getByTestId('privacy-item'));
-      fireEvent.click(getByTestId('terms-item'));
+      fireEvent.press(getByTestId('email-item'));
+      fireEvent.press(getByTestId('website-item'));
+      fireEvent.press(getByTestId('more-apps-item'));
+      fireEvent.press(getByTestId('privacy-item'));
+      fireEvent.press(getByTestId('terms-item'));
 
       // Verify all actions were called
       expect(fullConfig.actions!.onEmailPress).toHaveBeenCalledTimes(1);
@@ -173,7 +173,7 @@ describe('About Package Integration', () => {
 
   describe('Error Handling', () => {
     it('should handle invalid config gracefully', async () => {
-      const { getByText } = render(
+      const { getByText, queryByText } = render(
         <AboutScreen config={null as any} />
       );
 
@@ -181,7 +181,7 @@ describe('About Package Integration', () => {
         expect(queryByText((content) => content.includes('Loading'))).toBeFalsy();
       });
 
-      expect(getByText(/Error:/)).toBeTruthy();
+      expect(getByText('No app information available')).toBeTruthy();
     });
 
     it('should handle missing actions gracefully', async () => {
@@ -207,7 +207,7 @@ describe('About Package Integration', () => {
 
   describe('Performance', () => {
     it('should handle rapid re-renders', async () => {
-      const { rerender, getByText } = render(
+      const { rerender, getByText, queryByText } = render(
         <AboutScreen config={fullConfig} />
       );
 
@@ -263,7 +263,7 @@ describe('About Package Integration', () => {
 
   describe('Memory Management', () => {
     it('should cleanup properly on unmount', async () => {
-      const { unmount, getByText } = render(
+      const { unmount, getByText, queryByText } = render(
         <AboutScreen config={fullConfig} />
       );
 

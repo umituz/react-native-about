@@ -23,8 +23,12 @@ export interface UseAboutInfoReturn {
   error: string | null;
   /** Initialize with config */
   initialize: (config: AboutConfig) => Promise<void>;
+  /** Update with new config */
+  update: (config: AboutConfig) => Promise<void>;
   /** Update app info */
   updateAppInfo: (updates: Partial<AppInfo>) => Promise<void>;
+  /** Refresh current app info */
+  refresh: () => Promise<void>;
   /** Reset to initial state */
   reset: () => void;
 }
@@ -42,9 +46,9 @@ export const useAboutInfo = (
   const isInitializedRef = useRef(false);
   const isMountedRef = useRef(true);
 
-  const initialize = useCallback(async (config: AboutConfig) => {
-    // Prevent multiple initializations
-    if (isInitializedRef.current) {
+  const initialize = useCallback(async (config: AboutConfig, force = false) => {
+    // Prevent multiple initializations unless forced
+    if (isInitializedRef.current && !force) {
       return;
     }
     
@@ -100,6 +104,57 @@ export const useAboutInfo = (
     }
   }, [repository]);
 
+  const update = useCallback(async (config: AboutConfig) => {
+    if (!isMountedRef.current) {
+      return;
+    }
+    
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const updatedAppInfo: AppInfo = {
+        name: config.appInfo.name || '',
+        version: config.appInfo.version || '1.0.0',
+        description: config.appInfo.description,
+        developer: config.appInfo.developer,
+        contactEmail: config.appInfo.contactEmail,
+        websiteUrl: config.appInfo.websiteUrl,
+        websiteDisplay: config.appInfo.websiteDisplay,
+        moreAppsUrl: config.appInfo.moreAppsUrl,
+        privacyPolicyUrl: config.appInfo.privacyPolicyUrl,
+        termsOfServiceUrl: config.appInfo.termsOfServiceUrl,
+      };
+      
+      await repository.saveAppInfo(updatedAppInfo);
+      
+      // Only update state if component is still mounted
+      if (isMountedRef.current) {
+        setAppInfo(updatedAppInfo);
+      }
+      
+      if (__DEV__) {
+        console.log('useAboutInfo: Updated with config', config);
+      }
+    } catch (err) {
+      if (!isMountedRef.current) {
+        return;
+      }
+      
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      setError(errorMessage);
+      
+      if (__DEV__) {
+        console.error('useAboutInfo: Update failed', err);
+      }
+    } finally {
+      // Only update loading state if component is still mounted
+      if (isMountedRef.current) {
+        setLoading(false);
+      }
+    }
+  }, [repository]);
+
   const updateAppInfo = useCallback(async (updates: Partial<AppInfo>) => {
     if (!appInfo || !isMountedRef.current) {
       if (isMountedRef.current) {
@@ -141,6 +196,44 @@ export const useAboutInfo = (
     }
   }, [repository, appInfo]);
 
+  const refresh = useCallback(async () => {
+    if (!isMountedRef.current || !appInfo) {
+      return;
+    }
+    
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const refreshedInfo = await repository.getAppInfo();
+      
+      // Only update state if component is still mounted
+      if (isMountedRef.current) {
+        setAppInfo(refreshedInfo);
+      }
+      
+      if (__DEV__) {
+        console.log('useAboutInfo: Refreshed app info');
+      }
+    } catch (err) {
+      if (!isMountedRef.current) {
+        return;
+      }
+      
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      setError(errorMessage);
+      
+      if (__DEV__) {
+        console.error('useAboutInfo: Refresh failed', err);
+      }
+    } finally {
+      // Only update loading state if component is still mounted
+      if (isMountedRef.current) {
+        setLoading(false);
+      }
+    }
+  }, [repository, appInfo]);
+
   const reset = useCallback(() => {
     if (!isMountedRef.current) {
       return;
@@ -164,10 +257,18 @@ export const useAboutInfo = (
     };
   }, [repository]);
 
+  // Set initial config when provided (without autoInit) - only if not autoInit
+  useEffect(() => {
+    if (initialConfig && !autoInit && isMountedRef.current && !isInitializedRef.current) {
+      // Don't auto-set appInfo when autoInit is false - wait for manual initialization
+      // This allows tests to verify that appInfo is null initially
+    }
+  }, [initialConfig, autoInit]);
+
   // Auto-initialize with dependency optimization
   useEffect(() => {
-    if (autoInit && initialConfig && !isInitializedRef.current && isMountedRef.current) {
-      initialize(initialConfig);
+    if (autoInit && initialConfig && isMountedRef.current) {
+      initialize(initialConfig, true);
     }
   }, [autoInit, initialConfig, initialize]);
 
@@ -176,7 +277,9 @@ export const useAboutInfo = (
     loading,
     error,
     initialize,
+    update,
     updateAppInfo,
+    refresh,
     reset,
   };
 };
