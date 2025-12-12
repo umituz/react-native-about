@@ -24,6 +24,7 @@ jest.mock('react-native-web', () => {
       return React.createElement('div', { 
         'data-testid': testID, 
         onClick: onPress,
+        onPress: onPress, // Keep onPress for React Native compatibility
         style: { cursor: 'pointer', ...style },
         ...props 
       }, children);

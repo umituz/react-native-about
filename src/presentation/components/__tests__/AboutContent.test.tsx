@@ -134,12 +134,12 @@ describe('AboutContent', () => {
         websiteDisplay: 'Custom Display',
       };
 
-      const { getByText } = render(
+      const { getByText, queryByText } = render(
         <AboutContent appInfo={appInfoWithDisplay} config={mockConfig} />
       );
 
       expect(getByText('Custom Display')).toBeTruthy();
-      expect(getByText('https://example.com')).toBeFalsy();
+      expect(queryByText('https://example.com')).toBeFalsy();
     });
 
     it('should use websiteUrl when websiteDisplay not provided', () => {
@@ -163,7 +163,7 @@ describe('AboutContent', () => {
         <AboutContent appInfo={mockAppInfo} config={mockConfig} />
       );
 
-      fireEvent.press(getByTestId('email-item'));
+      fireEvent.click(getByTestId('email-item'));
       expect(mockConfig.actions!.onEmailPress).toHaveBeenCalledTimes(1);
     });
 
@@ -172,7 +172,7 @@ describe('AboutContent', () => {
         <AboutContent appInfo={mockAppInfo} config={mockConfig} />
       );
 
-      fireEvent.press(getByTestId('website-item'));
+      fireEvent.click(getByTestId('website-item'));
       expect(mockConfig.actions!.onWebsitePress).toHaveBeenCalledTimes(1);
     });
 
@@ -181,7 +181,7 @@ describe('AboutContent', () => {
         <AboutContent appInfo={mockAppInfo} config={mockConfig} />
       );
 
-      fireEvent.press(getByTestId('more-apps-item'));
+      fireEvent.click(getByTestId('more-apps-item'));
       expect(mockConfig.actions!.onMoreAppsPress).toHaveBeenCalledTimes(1);
     });
 
@@ -190,7 +190,7 @@ describe('AboutContent', () => {
         <AboutContent appInfo={mockAppInfo} config={mockConfig} />
       );
 
-      fireEvent.press(getByTestId('privacy-item'));
+      fireEvent.click(getByTestId('privacy-item'));
       expect(mockConfig.actions!.onPrivacyPress).toHaveBeenCalledTimes(1);
     });
 
@@ -199,7 +199,7 @@ describe('AboutContent', () => {
         <AboutContent appInfo={mockAppInfo} config={mockConfig} />
       );
 
-      fireEvent.press(getByTestId('terms-item'));
+      fireEvent.click(getByTestId('terms-item'));
       expect(mockConfig.actions!.onTermsPress).toHaveBeenCalledTimes(1);
     });
 
@@ -213,8 +213,8 @@ describe('AboutContent', () => {
       );
 
       expect(() => {
-        fireEvent.press(getByTestId('email-item'));
-        fireEvent.press(getByTestId('website-item'));
+        fireEvent.click(getByTestId('email-item'));
+        fireEvent.click(getByTestId('website-item'));
       }).not.toThrow();
     });
 
@@ -231,8 +231,8 @@ describe('AboutContent', () => {
         <AboutContent appInfo={mockAppInfo} config={configWithUndefinedActions} />
       );
 
-      fireEvent.press(getByTestId('email-item'));
-      fireEvent.press(getByTestId('website-item'));
+      fireEvent.click(getByTestId('email-item'));
+      fireEvent.click(getByTestId('website-item'));
 
       // Should not throw and should not call any undefined functions
       expect(true).toBe(true);
