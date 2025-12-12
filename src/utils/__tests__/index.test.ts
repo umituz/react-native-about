@@ -1,8 +1,8 @@
 /**
  * Tests for utility functions
  */
-/// <reference path="../types/global.d.ts" />
-/// <reference path="./types.d.ts" />
+import '../../types/global.d.ts';
+import { Linking } from 'react-native';
 import {
   createDefaultConfig,
   validateConfig,
@@ -22,7 +22,7 @@ jest.mock('react-native', () => ({
 }));
 
 // Mock console methods
-const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
+jest.spyOn(console, 'log').mockImplementation();
 const mockConsoleError = jest.spyOn(console, 'error').mockImplementation();
 
 describe('Utils', () => {
@@ -98,7 +98,7 @@ describe('Utils', () => {
     });
 
     it('should handle null/undefined overrides', () => {
-      const config = createDefaultConfig(null as any);
+      const config = createDefaultConfig(null as unknown);
 
       expect(config.appInfo.name).toBe('');
       expect(config.theme.primary).toBe('#007AFF');
@@ -180,7 +180,7 @@ describe('Utils', () => {
     it('should handle null/undefined configs', () => {
       const config1 = { appInfo: { name: 'App1' } };
       
-      const merged = mergeConfigs(config1, null, undefined, {} as any);
+      const merged = mergeConfigs(config1, null, undefined, {} as unknown);
 
       expect(merged).toEqual({
         appInfo: {
@@ -251,7 +251,6 @@ describe('Utils', () => {
   });
 
   describe('openUrl', () => {
-    const { Linking } = require('react-native');
 
     beforeEach(() => {
       Linking.canOpenURL.mockClear();
@@ -343,7 +342,7 @@ describe('Utils', () => {
   });
 
   describe('sendEmail', () => {
-    const { Linking } = require('react-native');
+    
 
     beforeEach(() => {
       Linking.canOpenURL.mockClear();

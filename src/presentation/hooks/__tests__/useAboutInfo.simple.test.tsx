@@ -142,7 +142,7 @@ describe('useAboutInfo', () => {
       await new Promise(resolve => setTimeout(resolve, 10));
     });
 
-    const initialAppInfo = result.current.appInfo;
+    
 
     // Refresh should not throw
     await act(async () => {
@@ -151,9 +151,16 @@ describe('useAboutInfo', () => {
 
     // Should not crash and should have some app info state
     expect(result.current).toBeDefined();
-  });
+    });
 
-    const initialAppInfo = result.current.appInfo;
+  it('should refresh app info', async () => {
+    const { result } = renderHook(() => useAboutInfo());
+    
+    await act(async () => {
+      await result.current.initialize(mockConfig);
+    });
+
+    
 
     await act(async () => {
       await result.current.refresh();
@@ -165,7 +172,7 @@ describe('useAboutInfo', () => {
 
   it('should handle errors during initialization', async () => {
     const { result } = renderHook(() => 
-      useAboutInfo({ autoInit: true, initialConfig: null as any })
+      useAboutInfo({ autoInit: true, initialConfig: null as unknown })
     );
 
     await act(async () => {
@@ -183,7 +190,7 @@ describe('useAboutInfo', () => {
     const { result } = renderHook(() => useAboutInfo({ initialConfig: mockConfig }));
 
     await act(async () => {
-      await result.current.update(null as any);
+      await result.current.update(null as unknown);
     });
 
     expect(result.current.error).toBeTruthy();
@@ -192,7 +199,7 @@ describe('useAboutInfo', () => {
   it('should memoize values', () => {
     const { result, rerender } = renderHook(() => useAboutInfo({ initialConfig: mockConfig }));
 
-    const initialAppInfo = result.current.appInfo;
+    
     const initialLoading = result.current.loading;
     const initialError = result.current.error;
 
@@ -217,6 +224,6 @@ describe('useAboutInfo', () => {
       } catch (error) {
         // Expected to not crash
       }
-    });
+        });
   });
 });

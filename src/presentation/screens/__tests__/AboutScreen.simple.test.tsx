@@ -42,7 +42,7 @@ describe('AboutScreen', () => {
   });
 
   it('should render error state when initialization fails', () => {
-    const invalidConfig = null as any;
+    const invalidConfig = null as unknown;
     
     const element = React.createElement(AboutScreen, { config: invalidConfig });
     expect(element).toBeTruthy();
@@ -50,7 +50,7 @@ describe('AboutScreen', () => {
 
   it('should render no app info message when app info is null', () => {
     const emptyConfig: AboutConfig = {
-      appInfo: null as any,
+      appInfo: null as unknown,
       actions: {},
     };
 
@@ -105,7 +105,7 @@ describe('AboutScreen', () => {
   });
 
   it('should apply custom title style', () => {
-    const customStyle = { color: 'green' } as any;
+    const customStyle = { color: 'green' } as React.CSSProperties;
     
     const element = React.createElement(AboutScreen, { 
       config: mockConfig, 

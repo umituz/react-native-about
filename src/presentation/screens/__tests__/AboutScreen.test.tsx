@@ -72,7 +72,7 @@ describe('AboutScreen', () => {
     });
 
     it('should render error state when initialization fails', async () => {
-      const invalidConfig = null as any;
+      const invalidConfig = null as unknown;
       
       const { getByText, queryByText } = render(
         <AboutScreen config={invalidConfig} />
@@ -103,7 +103,7 @@ describe('AboutScreen', () => {
     });
 
     it('should not render header when showHeader is false', async () => {
-      const { getByText, queryByText } = render(
+      const { queryByText } = render(
         <AboutScreen config={mockConfig} showHeader={false} />
       );
 
@@ -148,7 +148,7 @@ describe('AboutScreen', () => {
     it('should apply custom container style', async () => {
       const customStyle = { backgroundColor: 'red' };
       
-      const { getByTestId, queryByText, container } = render(
+      const { queryByText, container } = render(
         <AboutScreen config={mockConfig} containerStyle={customStyle} testID="screen" />
       );
 

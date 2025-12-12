@@ -30,9 +30,9 @@ describe('AboutRepository', () => {
     });
 
     it('should throw error for invalid input', async () => {
-      await expect(repository.saveAppInfo(null as any)).rejects.toThrow('Invalid app info provided');
-      await expect(repository.saveAppInfo(undefined as any)).rejects.toThrow('Invalid app info provided');
-      await expect(repository.saveAppInfo('invalid' as any)).rejects.toThrow('Invalid app info provided');
+      await expect(repository.saveAppInfo(null as unknown)).rejects.toThrow('Invalid app info provided');
+      await expect(repository.saveAppInfo(undefined as unknown)).rejects.toThrow('Invalid app info provided');
+      await expect(repository.saveAppInfo('invalid' as unknown)).rejects.toThrow('Invalid app info provided');
     });
 
     it('should store a copy of the data', async () => {
@@ -104,9 +104,9 @@ describe('AboutRepository', () => {
     });
 
     it('should throw error for invalid updates', async () => {
-      await expect(repository.updateAppInfo(null as any)).rejects.toThrow('Invalid updates provided');
-      await expect(repository.updateAppInfo(undefined as any)).rejects.toThrow('Invalid updates provided');
-      await expect(repository.updateAppInfo('invalid' as any)).rejects.toThrow('Invalid updates provided');
+      await expect(repository.updateAppInfo(null as unknown)).rejects.toThrow('Invalid updates provided');
+      await expect(repository.updateAppInfo(undefined as unknown)).rejects.toThrow('Invalid updates provided');
+      await expect(repository.updateAppInfo('invalid' as unknown)).rejects.toThrow('Invalid updates provided');
     });
 
     it('should return a copy of the updated data', async () => {

@@ -1,8 +1,7 @@
 /**
  * Tests for useAboutInfo hook
  */
-/// <reference path="../../../types/global.d.ts" />
-/// <reference path="../../__tests__/types.d.ts" />
+import '../../../types/global.d.ts';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { useAboutInfo } from '../useAboutInfo';
 import { AboutConfig } from '../../../domain/entities/AppInfo';
@@ -126,7 +125,7 @@ describe('useAboutInfo', () => {
       const { result } = renderHook(() => useAboutInfo());
 
       await act(async () => {
-        await result.current.initialize(null as any);
+        await result.current.initialize(null as unknown);
       });
 
       expect(result.current.appInfo).toBeNull();
@@ -186,7 +185,7 @@ describe('useAboutInfo', () => {
       });
 
       await act(async () => {
-        await result.current.updateAppInfo(null as any);
+        await result.current.updateAppInfo(null as unknown);
       });
 
       expect(result.current.error).toBeTruthy();
@@ -270,7 +269,7 @@ describe('useAboutInfo', () => {
       const { result } = renderHook(() => useAboutInfo());
 
       await act(async () => {
-        await result.current.initialize(null as any);
+        await result.current.initialize(null as unknown);
       });
 
       expect(mockConsoleError).toHaveBeenCalledWith('useAboutInfo: Initialization failed', expect.any(Error));

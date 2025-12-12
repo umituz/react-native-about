@@ -1,11 +1,11 @@
 /**
  * Integration tests for the entire About package
  */
-/// <reference path="../types/global.d.ts" />
-/// <reference path="./types.d.ts" />
+import '../types/global.d.ts';
+import './types.d.ts';
 import React from 'react';
 import { View, Text } from 'react-native';
-import { render, waitFor, fireEvent, queryByText } from '@testing-library/react';
+import { render, waitFor, fireEvent } from '@testing-library/react';
 import { AboutScreen } from '../presentation/screens/AboutScreen';
 import { AboutConfig } from '../domain/entities/AppInfo';
 
@@ -60,7 +60,7 @@ describe('About Package Integration', () => {
 
   describe('Complete Flow', () => {
     it('should render complete about screen with all features', async () => {
-      const { getByText, getByTestId, queryByText } = render(
+      const { getByText, queryByText } = render(
         <AboutScreen config={fullConfig} />
       );
 
@@ -148,7 +148,7 @@ describe('About Package Integration', () => {
       const CustomHeader = () => <View testID="custom-header"><Text>Custom Header</Text></View>;
       const CustomFooter = () => <View testID="custom-footer"><Text>Custom Footer</Text></View>;
 
-      const { getByTestId, queryByText, getByText } = render(
+      const { getByTestId, queryByText } = render(
         <AboutScreen 
           config={fullConfig} 
           headerComponent={<CustomHeader />}
@@ -173,8 +173,8 @@ describe('About Package Integration', () => {
 
   describe('Error Handling', () => {
     it('should handle invalid config gracefully', async () => {
-      const { getByText, queryByText } = render(
-        <AboutScreen config={null as any} />
+      const { queryByText } = render(
+        <AboutScreen config={null as unknown} />
       );
 
       await waitFor(() => {
@@ -263,7 +263,7 @@ describe('About Package Integration', () => {
 
   describe('Memory Management', () => {
     it('should cleanup properly on unmount', async () => {
-      const { unmount, getByText, queryByText } = render(
+      const { unmount, queryByText } = render(
         <AboutScreen config={fullConfig} />
       );
 
