@@ -20,10 +20,6 @@ export interface AppInfo {
   websiteDisplay?: string;
   /** More apps URL */
   moreAppsUrl?: string;
-  /** Privacy policy URL */
-  privacyPolicyUrl?: string;
-  /** Terms of service URL */
-  termsOfServiceUrl?: string;
 }
 
 /**
@@ -52,20 +48,15 @@ export interface AboutConfig {
   actions?: {
     onWebsitePress?: () => void;
     onEmailPress?: () => void;
-    onPrivacyPress?: () => void;
-    onTermsPress?: () => void;
     onMoreAppsPress?: () => void;
   };
   /** Localized texts for section headers and labels */
   texts?: {
     contact?: string;
     more?: string;
-    legal?: string;
     developer?: string;
     email?: string;
     website?: string;
     moreApps?: string;
-    privacyPolicy?: string;
-    termsOfService?: string;
   };
 }

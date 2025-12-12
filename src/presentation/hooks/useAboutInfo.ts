@@ -41,7 +41,7 @@ export const useAboutInfo = (
   const [appInfo, setAppInfo] = useState<AppInfo | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Prevent infinite loops and memory leaks
   const isInitializedRef = useRef(false);
   const isMountedRef = useRef(true);
@@ -51,15 +51,15 @@ export const useAboutInfo = (
     if (isInitializedRef.current && !force) {
       return;
     }
-    
+
     // Check if component is still mounted
     if (!isMountedRef.current) {
       return;
     }
-    
+
     setLoading(true);
     setError(null);
-    
+
     try {
       const defaultAppInfo: AppInfo = {
         name: config.appInfo.name || '',
@@ -70,18 +70,16 @@ export const useAboutInfo = (
         websiteUrl: config.appInfo.websiteUrl,
         websiteDisplay: config.appInfo.websiteDisplay,
         moreAppsUrl: config.appInfo.moreAppsUrl,
-        privacyPolicyUrl: config.appInfo.privacyPolicyUrl,
-        termsOfServiceUrl: config.appInfo.termsOfServiceUrl,
       };
-      
+
       await repository.saveAppInfo(defaultAppInfo);
-      
+
       // Only update state if component is still mounted
       if (isMountedRef.current) {
         setAppInfo(defaultAppInfo);
         isInitializedRef.current = true;
       }
-      
+
       if (__DEV__) {
         console.log('useAboutInfo: Initialized with config', config);
       }
@@ -89,10 +87,10 @@ export const useAboutInfo = (
       if (!isMountedRef.current) {
         return;
       }
-      
+
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(errorMessage);
-      
+
       if (__DEV__) {
         console.error('useAboutInfo: Initialization failed', err);
       }
@@ -108,10 +106,10 @@ export const useAboutInfo = (
     if (!isMountedRef.current) {
       return;
     }
-    
+
     setLoading(true);
     setError(null);
-    
+
     try {
       const updatedAppInfo: AppInfo = {
         name: config.appInfo.name || '',
@@ -122,17 +120,15 @@ export const useAboutInfo = (
         websiteUrl: config.appInfo.websiteUrl,
         websiteDisplay: config.appInfo.websiteDisplay,
         moreAppsUrl: config.appInfo.moreAppsUrl,
-        privacyPolicyUrl: config.appInfo.privacyPolicyUrl,
-        termsOfServiceUrl: config.appInfo.termsOfServiceUrl,
       };
-      
+
       await repository.saveAppInfo(updatedAppInfo);
-      
+
       // Only update state if component is still mounted
       if (isMountedRef.current) {
         setAppInfo(updatedAppInfo);
       }
-      
+
       if (__DEV__) {
         console.log('useAboutInfo: Updated with config', config);
       }
@@ -140,10 +136,10 @@ export const useAboutInfo = (
       if (!isMountedRef.current) {
         return;
       }
-      
+
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(errorMessage);
-      
+
       if (__DEV__) {
         console.error('useAboutInfo: Update failed', err);
       }
@@ -162,18 +158,18 @@ export const useAboutInfo = (
       }
       return;
     }
-    
+
     setLoading(true);
     setError(null);
-    
+
     try {
       const updatedInfo = await repository.updateAppInfo(updates);
-      
+
       // Only update state if component is still mounted
       if (isMountedRef.current) {
         setAppInfo(updatedInfo);
       }
-      
+
       if (__DEV__) {
         console.log('useAboutInfo: Updated app info', updates);
       }
@@ -181,10 +177,10 @@ export const useAboutInfo = (
       if (!isMountedRef.current) {
         return;
       }
-      
+
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(errorMessage);
-      
+
       if (__DEV__) {
         console.error('useAboutInfo: Update failed', err);
       }
@@ -200,18 +196,18 @@ export const useAboutInfo = (
     if (!isMountedRef.current || !appInfo) {
       return;
     }
-    
+
     setLoading(true);
     setError(null);
-    
+
     try {
       const refreshedInfo = await repository.getAppInfo();
-      
+
       // Only update state if component is still mounted
       if (isMountedRef.current) {
         setAppInfo(refreshedInfo);
       }
-      
+
       if (__DEV__) {
         console.log('useAboutInfo: Refreshed app info');
       }
@@ -219,10 +215,10 @@ export const useAboutInfo = (
       if (!isMountedRef.current) {
         return;
       }
-      
+
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(errorMessage);
-      
+
       if (__DEV__) {
         console.error('useAboutInfo: Refresh failed', err);
       }
@@ -238,7 +234,7 @@ export const useAboutInfo = (
     if (!isMountedRef.current) {
       return;
     }
-    
+
     setAppInfo(null);
     setError(null);
     setLoading(false);
@@ -249,7 +245,7 @@ export const useAboutInfo = (
   useEffect(() => {
     return () => {
       isMountedRef.current = false;
-      
+
       // Cleanup repository if it has destroy method
       if (repository && typeof repository.destroy === 'function') {
         repository.destroy();
@@ -257,7 +253,7 @@ export const useAboutInfo = (
     };
   }, [repository]);
 
-  
+
 
   // Set initial config when provided (if autoInit is not explicitly false)
   useEffect(() => {
@@ -271,10 +267,8 @@ export const useAboutInfo = (
         websiteUrl: initialConfig.appInfo.websiteUrl,
         websiteDisplay: initialConfig.appInfo.websiteDisplay,
         moreAppsUrl: initialConfig.appInfo.moreAppsUrl,
-        privacyPolicyUrl: initialConfig.appInfo.privacyPolicyUrl,
-        termsOfServiceUrl: initialConfig.appInfo.termsOfServiceUrl,
       };
-      
+
       setAppInfo(defaultAppInfo);
       isInitializedRef.current = true;
     }

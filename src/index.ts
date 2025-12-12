@@ -38,15 +38,15 @@ export const About = {
     }
     return { success: true, config };
   },
-  
+
   execute: (props: Record<string, unknown>) => {
-    return { 
-      success: true, 
+    return {
+      success: true,
       data: props,
       timestamp: new Date().toISOString()
     };
   },
-  
+
   getInfo: (config: import('./domain/entities/AppInfo').AboutConfig) => {
     return {
       appName: config.appInfo.name || 'Unknown App',
@@ -54,12 +54,10 @@ export const About = {
       description: config.appInfo.description || '',
       developer: config.appInfo.developer || '',
       email: config.appInfo.contactEmail || '',
-      website: config.appInfo.websiteUrl || '',
-      privacyPolicy: config.appInfo.privacyPolicyUrl || '',
-      termsOfService: config.appInfo.termsOfServiceUrl || ''
+      website: config.appInfo.websiteUrl || ''
     };
   },
-  
+
   updateConfig: (newConfig: Partial<import('./domain/entities/AppInfo').AboutConfig>) => {
     if (__DEV__) {
       console.log('About config updated:', newConfig);

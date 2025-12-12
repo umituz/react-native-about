@@ -24,7 +24,6 @@ export const AboutContent: React.FC<AboutContentProps> = ({
   config,
 }) => {
   const hasContactInfo = appInfo.developer || appInfo.contactEmail || appInfo.websiteUrl;
-  const hasLegalInfo = appInfo.privacyPolicyUrl || appInfo.termsOfServiceUrl;
   const hasMoreInfo = appInfo.moreAppsUrl;
 
   const texts = config.texts || {};
@@ -74,30 +73,6 @@ export const AboutContent: React.FC<AboutContentProps> = ({
             testID="more-apps-item"
             showChevron={!!config.actions?.onMoreAppsPress}
           />
-        </View>
-      )}
-
-      {hasLegalInfo && (
-        <View style={styles.section}>
-          <AboutSectionHeader title={texts.legal || "Legal"} />
-
-          {appInfo.privacyPolicyUrl && (
-            <AboutSettingItem
-              title={texts.privacyPolicy || "Privacy Policy"}
-              onPress={config.actions?.onPrivacyPress}
-              testID="privacy-item"
-              showChevron={!!config.actions?.onPrivacyPress}
-            />
-          )}
-
-          {appInfo.termsOfServiceUrl && (
-            <AboutSettingItem
-              title={texts.termsOfService || "Terms of Service"}
-              onPress={config.actions?.onTermsPress}
-              testID="terms-item"
-              showChevron={!!config.actions?.onTermsPress}
-            />
-          )}
         </View>
       )}
     </View>
