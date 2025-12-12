@@ -28,7 +28,7 @@ export interface AppInfo {
  */
 export interface AboutConfig {
   /** Application information */
-  appInfo: Partial<AppInfo>;
+  appInfo?: Partial<AppInfo>;
   /** Custom theme colors */
   theme?: {
     primary?: string;
