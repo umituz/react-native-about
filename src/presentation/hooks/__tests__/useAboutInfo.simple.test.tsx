@@ -9,6 +9,9 @@ import { AppInfo, AboutConfig } from '../../domain/entities/AppInfo';
 jest.mock('../../../infrastructure/repositories/AboutRepository', () => ({
   AboutRepository: jest.fn().mockImplementation(() => ({
     getAppInfo: jest.fn(),
+    saveAppInfo: jest.fn(),
+    updateAppInfo: jest.fn(),
+    destroy: jest.fn(),
   })),
 }));
 
