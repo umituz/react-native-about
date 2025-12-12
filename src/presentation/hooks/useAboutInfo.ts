@@ -257,11 +257,25 @@ export const useAboutInfo = (
     };
   }, [repository]);
 
-  // Set initial config when provided (without autoInit) - only if not autoInit
+  // Set initial config when provided (without autoInit) - when autoInit is not explicitly true
   useEffect(() => {
     if (initialConfig && !autoInit && isMountedRef.current && !isInitializedRef.current) {
-      // Don't auto-set appInfo when autoInit is false - wait for manual initialization
-      // This allows tests to verify that appInfo is null initially
+      // Set initial config without full initialization when autoInit is undefined or true
+      const defaultAppInfo: AppInfo = {
+        name: initialConfig.appInfo.name || '',
+        version: initialConfig.appInfo.version || '1.0.0',
+        description: initialConfig.appInfo.description,
+        developer: initialConfig.appInfo.developer,
+        contactEmail: initialConfig.appInfo.contactEmail,
+        websiteUrl: initialConfig.appInfo.websiteUrl,
+        websiteDisplay: initialConfig.appInfo.websiteDisplay,
+        moreAppsUrl: initialConfig.appInfo.moreAppsUrl,
+        privacyPolicyUrl: initialConfig.appInfo.privacyPolicyUrl,
+        termsOfServiceUrl: initialConfig.appInfo.termsOfServiceUrl,
+      };
+      
+      setAppInfo(defaultAppInfo);
+      isInitializedRef.current = true;
     }
   }, [initialConfig, autoInit]);
 

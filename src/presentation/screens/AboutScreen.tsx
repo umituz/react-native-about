@@ -109,7 +109,7 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({
 
   if (loading) {
     return (
-      <View style={containerStyles}>
+      <View style={containerStyles} testID={testID}>
         <Text style={styles.loadingText}>Loading...</Text>
       </View>
     );
@@ -117,7 +117,7 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({
 
   if (error) {
     return (
-      <View style={containerStyles}>
+      <View style={containerStyles} testID={testID}>
         <Text style={styles.errorText}>Error: {error}</Text>
       </View>
     );
@@ -125,7 +125,7 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({
 
   if (!appInfo) {
     return (
-      <View style={containerStyles}>
+      <View style={containerStyles} testID={testID}>
         <Text style={styles.errorText}>No app information available</Text>
       </View>
     );

@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { View, Text, TextStyle } from 'react-native';
-import { render, waitFor, fireEvent } from '@testing-library/react-native';
+import { render, waitFor, fireEvent } from '@testing-library/react';
 import { AboutScreen } from '../AboutScreen';
 import { AboutConfig } from '../../../domain/entities/AppInfo';
 
@@ -148,7 +148,7 @@ describe('AboutScreen', () => {
     it('should apply custom container style', async () => {
       const customStyle = { backgroundColor: 'red' };
       
-      const { getByTestId, queryByText } = render(
+      const { getByTestId, queryByText, container } = render(
         <AboutScreen config={mockConfig} containerStyle={customStyle} testID="screen" />
       );
 
@@ -156,8 +156,8 @@ describe('AboutScreen', () => {
         expect(queryByText('Loading...')).toBeFalsy();
       });
 
-      const screen = getByTestId('screen');
-      expect(screen.props.style).toEqual(
+      // Test the container style directly
+      expect(container.firstChild?.props.style).toEqual(
         expect.arrayContaining([
           expect.objectContaining(customStyle)
         ])
@@ -195,6 +195,7 @@ describe('AboutScreen', () => {
       });
 
       const title = getByText('Test App');
+      // Check that custom style is included in the style array
       expect(title.props.style).toEqual(
         expect.arrayContaining([
           expect.objectContaining(customStyle)
@@ -237,11 +238,11 @@ describe('AboutScreen', () => {
       });
 
       // Test interactions
-      fireEvent.press(getByTestId('email-item'));
-      fireEvent.press(getByTestId('website-item'));
-      fireEvent.press(getByTestId('more-apps-item'));
-      fireEvent.press(getByTestId('privacy-item'));
-      fireEvent.press(getByTestId('terms-item'));
+      fireEvent.click(getByTestId('email-item'));
+      fireEvent.click(getByTestId('website-item'));
+      fireEvent.click(getByTestId('more-apps-item'));
+      fireEvent.click(getByTestId('privacy-item'));
+      fireEvent.click(getByTestId('terms-item'));
 
       expect(mockConfig.actions!.onEmailPress).toHaveBeenCalledTimes(1);
       expect(mockConfig.actions!.onWebsitePress).toHaveBeenCalledTimes(1);

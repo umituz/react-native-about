@@ -5,7 +5,7 @@
 /// <reference path="./types.d.ts" />
 import React from 'react';
 import { View, Text } from 'react-native';
-import { render, waitFor, fireEvent, queryByText } from '@testing-library/react-native';
+import { render, waitFor, fireEvent, queryByText } from '@testing-library/react';
 import { AboutScreen } from '../presentation/screens/AboutScreen';
 import { AboutConfig } from '../domain/entities/AppInfo';
 
@@ -100,11 +100,11 @@ describe('About Package Integration', () => {
       });
 
       // Test all interactions
-      fireEvent.press(getByTestId('email-item'));
-      fireEvent.press(getByTestId('website-item'));
-      fireEvent.press(getByTestId('more-apps-item'));
-      fireEvent.press(getByTestId('privacy-item'));
-      fireEvent.press(getByTestId('terms-item'));
+      fireEvent.click(getByTestId('email-item'));
+      fireEvent.click(getByTestId('website-item'));
+      fireEvent.click(getByTestId('more-apps-item'));
+      fireEvent.click(getByTestId('privacy-item'));
+      fireEvent.click(getByTestId('terms-item'));
 
       // Verify all actions were called
       expect(fullConfig.actions!.onEmailPress).toHaveBeenCalledTimes(1);
@@ -199,8 +199,8 @@ describe('About Package Integration', () => {
 
       // Should not crash when pressing items without actions
       expect(() => {
-        fireEvent.press(getByTestId('email-item'));
-        fireEvent.press(getByTestId('website-item'));
+        fireEvent.click(getByTestId('email-item'));
+        fireEvent.click(getByTestId('website-item'));
       }).not.toThrow();
     });
   });
