@@ -16,8 +16,6 @@ describe('AboutContent', () => {
     websiteUrl: 'https://example.com',
     websiteDisplay: 'example.com',
     moreAppsUrl: 'https://apps.example.com',
-    privacyPolicyUrl: 'https://example.com/privacy',
-    termsOfServiceUrl: 'https://example.com/terms',
   };
 
   const mockConfig: AboutConfig = {
@@ -25,8 +23,6 @@ describe('AboutContent', () => {
     actions: {
       onEmailPress: jest.fn(),
       onWebsitePress: jest.fn(),
-      onPrivacyPress: jest.fn(),
-      onTermsPress: jest.fn(),
       onMoreAppsPress: jest.fn(),
     },
   };
@@ -69,22 +65,6 @@ describe('AboutContent', () => {
       );
 
       expect(getByText('More Apps')).toBeTruthy();
-    });
-
-    it('should render privacy policy when provided', () => {
-      const { getByText } = render(
-        <AboutContent appInfo={mockAppInfo} config={mockConfig} />
-      );
-
-      expect(getByText('Privacy Policy')).toBeTruthy();
-    });
-
-    it('should render terms of service when provided', () => {
-      const { getByText } = render(
-        <AboutContent appInfo={mockAppInfo} config={mockConfig} />
-      );
-
-      expect(getByText('Terms of Service')).toBeTruthy();
     });
 
     it('should not render developer when not provided', () => {
@@ -183,24 +163,6 @@ describe('AboutContent', () => {
 
       fireEvent.click(getByTestId('more-apps-item'));
       expect(mockConfig.actions!.onMoreAppsPress).toHaveBeenCalledTimes(1);
-    });
-
-    it('should call onPrivacyPress when privacy policy item is pressed', () => {
-      const { getByTestId } = render(
-        <AboutContent appInfo={mockAppInfo} config={mockConfig} />
-      );
-
-      fireEvent.click(getByTestId('privacy-item'));
-      expect(mockConfig.actions!.onPrivacyPress).toHaveBeenCalledTimes(1);
-    });
-
-    it('should call onTermsPress when terms of service item is pressed', () => {
-      const { getByTestId } = render(
-        <AboutContent appInfo={mockAppInfo} config={mockConfig} />
-      );
-
-      fireEvent.click(getByTestId('terms-item'));
-      expect(mockConfig.actions!.onTermsPress).toHaveBeenCalledTimes(1);
     });
 
     it('should not crash when actions are not provided', () => {

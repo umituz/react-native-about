@@ -13,8 +13,6 @@ describe('AppInfo Entity', () => {
     websiteUrl: 'https://example.com',
     websiteDisplay: 'example.com',
     moreAppsUrl: 'https://apps.example.com',
-    privacyPolicyUrl: 'https://example.com/privacy',
-    termsOfServiceUrl: 'https://example.com/terms',
   };
 
   describe('Validation', () => {
@@ -55,7 +53,7 @@ describe('AppInfo Entity', () => {
   describe('Type Safety', () => {
     it('should have correct types', () => {
       const appInfo: AppInfo = validAppInfo;
-      
+
       expect(typeof appInfo.name).toBe('string');
       expect(typeof appInfo.version).toBe('string');
       expect(typeof appInfo.description).toBe('string');
@@ -64,8 +62,6 @@ describe('AppInfo Entity', () => {
       expect(typeof appInfo.websiteUrl).toBe('string');
       expect(typeof appInfo.websiteDisplay).toBe('string');
       expect(typeof appInfo.moreAppsUrl).toBe('string');
-      expect(typeof appInfo.privacyPolicyUrl).toBe('string');
-      expect(typeof appInfo.termsOfServiceUrl).toBe('string');
     });
 
     it('should allow undefined for optional fields', () => {
@@ -78,8 +74,6 @@ describe('AppInfo Entity', () => {
         websiteUrl: undefined,
         websiteDisplay: undefined,
         moreAppsUrl: undefined,
-        privacyPolicyUrl: undefined,
-        termsOfServiceUrl: undefined,
       };
 
       expect(appInfo.description).toBeUndefined();
@@ -90,7 +84,7 @@ describe('AppInfo Entity', () => {
   describe('Immutability', () => {
     it('should be assignable but not inherently immutable', () => {
       const appInfo: AppInfo = { ...validAppInfo };
-      
+
       // TypeScript allows mutation but we can test the behavior
       appInfo.name = 'Modified App';
       expect(appInfo.name).toBe('Modified App');

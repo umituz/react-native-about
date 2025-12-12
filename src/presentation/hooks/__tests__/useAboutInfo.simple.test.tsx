@@ -39,8 +39,6 @@ describe('useAboutInfo', () => {
     websiteUrl: 'https://example.com',
     websiteDisplay: 'example.com',
     moreAppsUrl: 'https://apps.example.com',
-    privacyPolicyUrl: 'https://example.com/privacy',
-    termsOfServiceUrl: 'https://example.com/terms',
   };
 
   const mockConfig: AboutConfig = {
@@ -48,8 +46,6 @@ describe('useAboutInfo', () => {
     actions: {
       onEmailPress: jest.fn(),
       onWebsitePress: jest.fn(),
-      onPrivacyPress: jest.fn(),
-      onTermsPress: jest.fn(),
       onMoreAppsPress: jest.fn(),
     },
   };
@@ -76,7 +72,7 @@ describe('useAboutInfo', () => {
   });
 
   it('should handle auto initialization', async () => {
-    const { result } = renderHook(() => 
+    const { result } = renderHook(() =>
       useAboutInfo({ autoInit: true, initialConfig: mockConfig })
     );
 
@@ -141,7 +137,7 @@ describe('useAboutInfo', () => {
   });
 
   it('should handle refresh', async () => {
-    const { result } = renderHook(() => 
+    const { result } = renderHook(() =>
       useAboutInfo({ autoInit: true, initialConfig: mockConfig })
     );
 
@@ -161,7 +157,7 @@ describe('useAboutInfo', () => {
 
   it('should refresh app info', async () => {
     const { result } = renderHook(() => useAboutInfo());
-    
+
     await act(async () => {
       await result.current.initialize(mockConfig);
     });
@@ -175,7 +171,7 @@ describe('useAboutInfo', () => {
   });
 
   it('should handle errors during initialization', async () => {
-    const { result } = renderHook(() => 
+    const { result } = renderHook(() =>
       useAboutInfo({ autoInit: true, initialConfig: null as unknown })
     );
 
@@ -215,7 +211,7 @@ describe('useAboutInfo', () => {
   });
 
   it('should handle update on unmounted component', async () => {
-    const { result, unmount } = renderHook(() => 
+    const { result, unmount } = renderHook(() =>
       useAboutInfo({ autoInit: true, initialConfig: mockConfig })
     );
 

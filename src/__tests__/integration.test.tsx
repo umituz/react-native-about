@@ -24,8 +24,6 @@ describe('About Package Integration', () => {
       websiteUrl: 'https://integration.example.com',
       websiteDisplay: 'integration.example.com',
       moreAppsUrl: 'https://apps.integration.example.com',
-      privacyPolicyUrl: 'https://integration.example.com/privacy',
-      termsOfServiceUrl: 'https://integration.example.com/terms',
     },
     theme: {
       primary: '#FF0000',
@@ -43,8 +41,6 @@ describe('About Package Integration', () => {
     actions: {
       onWebsitePress: jest.fn(),
       onEmailPress: jest.fn(),
-      onPrivacyPress: jest.fn(),
-      onTermsPress: jest.fn(),
       onMoreAppsPress: jest.fn(),
     },
   };
@@ -85,8 +81,6 @@ describe('About Package Integration', () => {
       expect(getByText('Website')).toBeTruthy();
       expect(getByText('integration.example.com')).toBeTruthy();
       expect(getByText('More Apps')).toBeTruthy();
-      expect(getByText('Privacy Policy')).toBeTruthy();
-      expect(getByText('Terms of Service')).toBeTruthy();
     });
 
     it('should handle all user interactions', async () => {
@@ -103,15 +97,11 @@ describe('About Package Integration', () => {
       fireEvent.click(getByTestId('email-item'));
       fireEvent.click(getByTestId('website-item'));
       fireEvent.click(getByTestId('more-apps-item'));
-      fireEvent.click(getByTestId('privacy-item'));
-      fireEvent.click(getByTestId('terms-item'));
 
       // Verify all actions were called
       expect(fullConfig.actions!.onEmailPress).toHaveBeenCalledTimes(1);
       expect(fullConfig.actions!.onWebsitePress).toHaveBeenCalledTimes(1);
       expect(fullConfig.actions!.onMoreAppsPress).toHaveBeenCalledTimes(1);
-      expect(fullConfig.actions!.onPrivacyPress).toHaveBeenCalledTimes(1);
-      expect(fullConfig.actions!.onTermsPress).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -149,8 +139,8 @@ describe('About Package Integration', () => {
       const CustomFooter = () => <View testID="custom-footer"><Text>Custom Footer</Text></View>;
 
       const { getByTestId, queryByText } = render(
-        <AboutScreen 
-          config={fullConfig} 
+        <AboutScreen
+          config={fullConfig}
           headerComponent={<CustomHeader />}
           footerComponent={<CustomFooter />}
           showHeader={false}
@@ -304,8 +294,6 @@ describe('About Package Integration', () => {
       expect(getByTestId('email-item')).toBeTruthy();
       expect(getByTestId('website-item')).toBeTruthy();
       expect(getByTestId('more-apps-item')).toBeTruthy();
-      expect(getByTestId('privacy-item')).toBeTruthy();
-      expect(getByTestId('terms-item')).toBeTruthy();
     });
   });
 

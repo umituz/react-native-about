@@ -22,14 +22,10 @@ describe('AboutScreen', () => {
       websiteUrl: 'https://example.com',
       websiteDisplay: 'example.com',
       moreAppsUrl: 'https://apps.example.com',
-      privacyPolicyUrl: 'https://example.com/privacy',
-      termsOfServiceUrl: 'https://example.com/terms',
     },
     actions: {
       onEmailPress: jest.fn(),
       onWebsitePress: jest.fn(),
-      onPrivacyPress: jest.fn(),
-      onTermsPress: jest.fn(),
       onMoreAppsPress: jest.fn(),
     },
   };
@@ -73,7 +69,7 @@ describe('AboutScreen', () => {
 
     it('should render error state when initialization fails', async () => {
       const invalidConfig = null as unknown;
-      
+
       const { getByText, queryByText } = render(
         <AboutScreen config={invalidConfig} />
       );
@@ -118,7 +114,7 @@ describe('AboutScreen', () => {
 
     it('should render custom header component when provided', async () => {
       const CustomHeader = () => <View testID="custom-header"><Text>Custom Header</Text></View>;
-      
+
       const { getByTestId, queryByText } = render(
         <AboutScreen config={mockConfig} headerComponent={<CustomHeader />} />
       );
@@ -133,7 +129,7 @@ describe('AboutScreen', () => {
 
     it('should render custom footer component when provided', async () => {
       const CustomFooter = () => <View testID="custom-footer"><Text>Custom Footer</Text></View>;
-      
+
       const { getByTestId } = render(
         <AboutScreen config={mockConfig} footerComponent={<CustomFooter />} />
       );
@@ -147,7 +143,7 @@ describe('AboutScreen', () => {
   describe('Custom Styles', () => {
     it('should apply custom container style', async () => {
       const customStyle = { backgroundColor: 'red' };
-      
+
       const { queryByText, container } = render(
         <AboutScreen config={mockConfig} containerStyle={customStyle} testID="screen" />
       );
@@ -162,7 +158,7 @@ describe('AboutScreen', () => {
 
     it('should apply custom header style', async () => {
       const customStyle = { backgroundColor: 'blue' };
-      
+
       const { getByText, queryByText } = render(
         <AboutScreen config={mockConfig} headerStyle={customStyle} />
       );
@@ -171,14 +167,14 @@ describe('AboutScreen', () => {
         expect(queryByText('Loading...')).toBeFalsy();
       });
 
-const header = getByText('Test App');
+      const header = getByText('Test App');
       // Check that header renders with custom style (component renders without error)
       expect(header).toBeTruthy();
     });
 
     it('should apply custom title style', async () => {
       const customStyle: TextStyle = { color: 'green' };
-      
+
       const { getByText, queryByText } = render(
         <AboutScreen config={mockConfig} titleStyle={customStyle} />
       );
@@ -194,7 +190,7 @@ const header = getByText('Test App');
 
     it('should apply custom version style', async () => {
       const customStyle = { color: 'purple' };
-      
+
       const { getByText, queryByText } = render(
         <AboutScreen config={mockConfig} versionStyle={customStyle} />
       );
@@ -219,22 +215,16 @@ const header = getByText('Test App');
         expect(getByTestId('email-item')).toBeTruthy();
         expect(getByTestId('website-item')).toBeTruthy();
         expect(getByTestId('more-apps-item')).toBeTruthy();
-        expect(getByTestId('privacy-item')).toBeTruthy();
-        expect(getByTestId('terms-item')).toBeTruthy();
       });
 
       // Test interactions
       fireEvent.click(getByTestId('email-item'));
       fireEvent.click(getByTestId('website-item'));
       fireEvent.click(getByTestId('more-apps-item'));
-      fireEvent.click(getByTestId('privacy-item'));
-      fireEvent.click(getByTestId('terms-item'));
 
       expect(mockConfig.actions!.onEmailPress).toHaveBeenCalledTimes(1);
       expect(mockConfig.actions!.onWebsitePress).toHaveBeenCalledTimes(1);
       expect(mockConfig.actions!.onMoreAppsPress).toHaveBeenCalledTimes(1);
-      expect(mockConfig.actions!.onPrivacyPress).toHaveBeenCalledTimes(1);
-      expect(mockConfig.actions!.onTermsPress).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -246,7 +236,7 @@ const header = getByText('Test App');
 
       // Wait for initial render
       await waitFor(() => {
-        expect(() => {}).not.toThrow();
+        expect(() => { }).not.toThrow();
       });
 
       // Re-render with same props
@@ -276,9 +266,9 @@ const header = getByText('Test App');
           appInfo: { ...mockConfig.appInfo, name: `App ${i}` }
         };
         rerender(<AboutScreen config={newConfig} />);
-        
+
         await waitFor(() => {
-          expect(() => {}).not.toThrow();
+          expect(() => { }).not.toThrow();
         });
       }
 
@@ -354,7 +344,7 @@ const header = getByText('Test App');
     it('should handle very long text', async () => {
       const longName = 'A'.repeat(100);
       const longDescription = 'B'.repeat(200);
-      
+
       const configWithLongText: AboutConfig = {
         appInfo: {
           name: longName,
