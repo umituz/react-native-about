@@ -36,7 +36,7 @@ export interface UseAboutInfoReturn {
 export const useAboutInfo = (
   options: UseAboutInfoOptions = {}
 ): UseAboutInfoReturn => {
-  const { initialConfig, autoInit = false } = options;
+  const { initialConfig, autoInit } = options;
   const [repository] = useState(() => new AboutRepository());
   const [appInfo, setAppInfo] = useState<AppInfo | null>(null);
   const [loading, setLoading] = useState(false);
@@ -257,10 +257,11 @@ export const useAboutInfo = (
     };
   }, [repository]);
 
-  // Set initial config when provided (without autoInit) - when autoInit is not explicitly true
+  
+
+  // Set initial config when provided (if autoInit is not explicitly false)
   useEffect(() => {
-    if (initialConfig && !autoInit && isMountedRef.current && !isInitializedRef.current) {
-      // Set initial config without full initialization when autoInit is undefined or true
+    if (initialConfig && autoInit !== false && isMountedRef.current && !isInitializedRef.current) {
       const defaultAppInfo: AppInfo = {
         name: initialConfig.appInfo.name || '',
         version: initialConfig.appInfo.version || '1.0.0',
@@ -281,7 +282,7 @@ export const useAboutInfo = (
 
   // Auto-initialize with dependency optimization
   useEffect(() => {
-    if (autoInit && initialConfig && isMountedRef.current) {
+    if (autoInit === true && initialConfig && isMountedRef.current) {
       initialize(initialConfig, true);
     }
   }, [autoInit, initialConfig, initialize]);

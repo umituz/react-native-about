@@ -173,7 +173,7 @@ describe('About Package Integration', () => {
 
   describe('Error Handling', () => {
     it('should handle invalid config gracefully', async () => {
-      const { queryByText } = render(
+      const { queryByText, getByText } = render(
         <AboutScreen config={null as unknown} />
       );
 

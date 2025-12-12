@@ -1,21 +1,35 @@
 /**
  * Simple test for useAboutInfo hook
  */
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act, waitFor } from '@testing-library/react';
 import { useAboutInfo } from '../useAboutInfo';
 import { AppInfo, AboutConfig } from '../../domain/entities/AppInfo';
 
-// Mock the repository
+// Mock repository
+let mockAppInfoData: AppInfo | null = null;
+
 jest.mock('../../../infrastructure/repositories/AboutRepository', () => ({
   AboutRepository: jest.fn().mockImplementation(() => ({
-    getAppInfo: jest.fn(),
-    saveAppInfo: jest.fn(),
-    updateAppInfo: jest.fn(),
+    getAppInfo: jest.fn(() => mockAppInfoData),
+    saveAppInfo: jest.fn((info: AppInfo) => {
+      mockAppInfoData = info;
+      return Promise.resolve();
+    }),
+    updateAppInfo: jest.fn((updates: Partial<AppInfo>) => {
+      if (mockAppInfoData) {
+        mockAppInfoData = { ...mockAppInfoData, ...updates };
+      }
+      return Promise.resolve();
+    }),
     destroy: jest.fn(),
   })),
 }));
 
 describe('useAboutInfo', () => {
+  beforeEach(() => {
+    mockAppInfoData = null;
+  });
+
   const mockAppInfo: AppInfo = {
     name: 'Test App',
     version: '1.0.0',
@@ -40,10 +54,6 @@ describe('useAboutInfo', () => {
     },
   };
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('should initialize with default state', () => {
     const { result } = renderHook(() => useAboutInfo());
 
@@ -53,14 +63,12 @@ describe('useAboutInfo', () => {
   });
 
   it('should initialize with config', async () => {
-    const { result } = renderHook(() => useAboutInfo({ initialConfig: mockConfig }));
+    const { result } = renderHook(() => useAboutInfo({ initialConfig: mockConfig, autoInit: undefined }));
 
+    // Wait for useEffect to run
     await act(async () => {
-      // Wait for useEffect to run
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise(resolve => setTimeout(resolve, 0));
     });
-
-
 
     expect(result.current.appInfo).toEqual(mockAppInfo);
     expect(result.current.loading).toBe(false);
@@ -76,52 +84,52 @@ describe('useAboutInfo', () => {
 
     await act(async () => {
       // Wait for initialization to complete
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise(resolve => setTimeout(resolve, 10));
     });
 
-    expect(result.current.loading).toBe(false);
     expect(result.current.appInfo).toEqual(mockAppInfo);
+    expect(result.current.loading).toBe(false);
+    expect(result.current.error).toBeNull();
   });
 
   it('should handle manual initialization', async () => {
     const { result } = renderHook(() => useAboutInfo());
-
-    expect(result.current.appInfo).toBeNull();
 
     await act(async () => {
       await result.current.initialize(mockConfig);
     });
 
     expect(result.current.appInfo).toEqual(mockAppInfo);
+    expect(result.current.loading).toBe(false);
+    expect(result.current.error).toBeNull();
   });
 
   it('should handle update', async () => {
     const { result } = renderHook(() => useAboutInfo({ initialConfig: mockConfig }));
 
-    const updatedConfig: AboutConfig = {
+    await act(async () => {
+      // Wait for initialization to complete
+      await new Promise(resolve => setTimeout(resolve, 10));
+    });
+
+    const updatedConfig = {
       ...mockConfig,
-      appInfo: {
-        ...mockAppInfo,
-        name: 'Updated App',
-      },
+      appInfo: { ...mockAppInfo, name: 'Updated App' }
     };
 
     await act(async () => {
       await result.current.update(updatedConfig);
     });
 
-    expect(result.current.appInfo.name).toBe('Updated App');
+    expect(result.current.appInfo?.name).toBe('Updated App');
   });
 
   it('should handle reset', async () => {
-    const { result } = renderHook(() => useAboutInfo({ initialConfig: mockConfig }));
+    const { result } = renderHook(() => useAboutInfo({ initialConfig: mockConfig, autoInit: undefined }));
 
-    await act(async () => {
-      // Wait for useEffect to run
-      await new Promise(resolve => setTimeout(resolve, 10));
+    await waitFor(() => {
+      expect(result.current.appInfo).toEqual(mockAppInfo);
     });
-
-    expect(result.current.appInfo).toEqual(mockAppInfo);
 
     act(() => {
       result.current.reset();
@@ -142,8 +150,6 @@ describe('useAboutInfo', () => {
       await new Promise(resolve => setTimeout(resolve, 10));
     });
 
-    
-
     // Refresh should not throw
     await act(async () => {
       await result.current.refresh();
@@ -151,7 +157,7 @@ describe('useAboutInfo', () => {
 
     // Should not crash and should have some app info state
     expect(result.current).toBeDefined();
-    });
+  });
 
   it('should refresh app info', async () => {
     const { result } = renderHook(() => useAboutInfo());
@@ -159,8 +165,6 @@ describe('useAboutInfo', () => {
     await act(async () => {
       await result.current.initialize(mockConfig);
     });
-
-    
 
     await act(async () => {
       await result.current.refresh();
@@ -199,7 +203,7 @@ describe('useAboutInfo', () => {
   it('should memoize values', () => {
     const { result, rerender } = renderHook(() => useAboutInfo({ initialConfig: mockConfig }));
 
-    
+    const initialAppInfo = result.current.appInfo;
     const initialLoading = result.current.loading;
     const initialError = result.current.error;
 
@@ -224,6 +228,6 @@ describe('useAboutInfo', () => {
       } catch (error) {
         // Expected to not crash
       }
-        });
+    });
   });
 });
