@@ -59,4 +59,12 @@ export interface AboutConfig {
     website?: string;
     moreApps?: string;
   };
+  /** Navigation route name */
+  route?: string;
+  /** Default navigation route name */
+  defaultRoute?: string;
+  /** Section title */
+  title?: string;
+  /** Section description */
+  description?: string;
 }

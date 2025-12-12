@@ -24,6 +24,8 @@ export type { AboutSettingItemProps } from './presentation/components/AboutSetti
 export type { AboutHeaderProps } from './presentation/components/AboutHeader';
 export type { AboutContentProps } from './presentation/components/AboutContent';
 export type { AboutScreenProps } from './presentation/screens/AboutScreen';
+export { AboutSection } from './presentation/components/AboutSection';
+export type { AboutSectionProps } from './presentation/components/AboutSection';
 export { useAboutInfo } from './presentation/hooks/useAboutInfo';
 export type { UseAboutInfoOptions, UseAboutInfoReturn } from './presentation/hooks/useAboutInfo';
 
