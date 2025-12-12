@@ -1,0 +1,269 @@
+/**
+ * Tests for useAboutInfo hook
+ */
+import { renderHook, act } from '@testing-library/react-native';
+import { useAboutInfo } from '../useAboutInfo';
+import { AboutConfig } from '../../domain/entities/AppInfo';
+
+// Mock console methods
+const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
+const mockConsoleError = jest.spyOn(console, 'error').mockImplementation();
+
+describe('useAboutInfo', () => {
+  const mockConfig: AboutConfig = {
+    appInfo: {
+      name: 'Test App',
+      version: '1.0.0',
+      description: 'Test Description',
+      developer: 'Test Developer',
+    },
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  afterEach(() => {
+    mockConsoleLog.mockClear();
+    mockConsoleError.mockClear();
+  });
+
+  describe('Initial State', () => {
+    it('should return initial state', () => {
+      const { result } = renderHook(() => useAboutInfo());
+
+      expect(result.current.appInfo).toBeNull();
+      expect(result.current.loading).toBe(false);
+      expect(result.current.error).toBeNull();
+      expect(typeof result.current.initialize).toBe('function');
+      expect(typeof result.current.updateAppInfo).toBe('function');
+      expect(typeof result.current.reset).toBe('function');
+    });
+
+    it('should auto-initialize when autoInit is true', async () => {
+      const { result, waitForNextUpdate } = renderHook(() => 
+        useAboutInfo({ autoInit: true, initialConfig: mockConfig })
+      );
+
+      expect(result.current.loading).toBe(true);
+
+      await waitForNextUpdate();
+
+      expect(result.current.appInfo).toEqual({
+        name: 'Test App',
+        version: '1.0.0',
+        description: 'Test Description',
+        developer: 'Test Developer',
+        contactEmail: undefined,
+        websiteUrl: undefined,
+        websiteDisplay: undefined,
+        moreAppsUrl: undefined,
+        privacyPolicyUrl: undefined,
+        termsOfServiceUrl: undefined,
+      });
+      expect(result.current.loading).toBe(false);
+      expect(result.current.error).toBeNull();
+    });
+
+    it('should not auto-initialize when autoInit is false', () => {
+      const { result } = renderHook(() => 
+        useAboutInfo({ autoInit: false, initialConfig: mockConfig })
+      );
+
+      expect(result.current.appInfo).toBeNull();
+      expect(result.current.loading).toBe(false);
+      expect(result.current.error).toBeNull();
+    });
+  });
+
+  describe('initialize', () => {
+    it('should initialize with config', async () => {
+      const { result, waitForNextUpdate } = renderHook(() => useAboutInfo());
+
+      await act(async () => {
+        await result.current.initialize(mockConfig);
+      });
+
+      expect(result.current.appInfo).toEqual({
+        name: 'Test App',
+        version: '1.0.0',
+        description: 'Test Description',
+        developer: 'Test Developer',
+        contactEmail: undefined,
+        websiteUrl: undefined,
+        websiteDisplay: undefined,
+        moreAppsUrl: undefined,
+        privacyPolicyUrl: undefined,
+        termsOfServiceUrl: undefined,
+      });
+      expect(result.current.loading).toBe(false);
+      expect(result.current.error).toBeNull();
+    });
+
+    it('should not initialize multiple times', async () => {
+      const { result, waitForNextUpdate } = renderHook(() => useAboutInfo());
+
+      await act(async () => {
+        await result.current.initialize(mockConfig);
+      });
+
+      const firstAppInfo = result.current.appInfo;
+
+      await act(async () => {
+        await result.current.initialize({
+          appInfo: { name: 'Different App', version: '2.0.0' }
+        });
+      });
+
+      expect(result.current.appInfo).toEqual(firstAppInfo);
+    });
+
+    it('should handle initialization errors', async () => {
+      const { result } = renderHook(() => useAboutInfo());
+
+      await act(async () => {
+        await result.current.initialize(null as any);
+      });
+
+      expect(result.current.appInfo).toBeNull();
+      expect(result.current.loading).toBe(false);
+      expect(result.current.error).toBeTruthy();
+    });
+  });
+
+  describe('updateAppInfo', () => {
+    beforeEach(async () => {
+      const { result, waitForNextUpdate } = renderHook(() => 
+        useAboutInfo({ autoInit: true, initialConfig: mockConfig })
+      );
+      await waitForNextUpdate();
+    });
+
+    it('should update app info', async () => {
+      const { result } = renderHook(() => 
+        useAboutInfo({ autoInit: true, initialConfig: mockConfig })
+      );
+
+      // Wait for initialization
+      await act(async () => {
+        await new Promise(resolve => setTimeout(resolve, 0));
+      });
+
+      await act(async () => {
+        await result.current.updateAppInfo({ name: 'Updated App', version: '2.0.0' });
+      });
+
+      expect(result.current.appInfo?.name).toBe('Updated App');
+      expect(result.current.appInfo?.version).toBe('2.0.0');
+      expect(result.current.appInfo?.description).toBe('Test Description'); // Unchanged
+      expect(result.current.loading).toBe(false);
+      expect(result.current.error).toBeNull();
+    });
+
+    it('should handle update when not initialized', async () => {
+      const { result } = renderHook(() => useAboutInfo());
+
+      await act(async () => {
+        await result.current.updateAppInfo({ name: 'Updated App' });
+      });
+
+      expect(result.current.appInfo).toBeNull();
+      expect(result.current.error).toBe('App info not initialized');
+    });
+
+    it('should handle update errors', async () => {
+      const { result, waitForNextUpdate } = renderHook(() => 
+        useAboutInfo({ autoInit: true, initialConfig: mockConfig })
+      );
+      await waitForNextUpdate();
+
+      await act(async () => {
+        await result.current.updateAppInfo(null as any);
+      });
+
+      expect(result.current.error).toBeTruthy();
+    });
+  });
+
+  describe('reset', () => {
+    it('should reset state', async () => {
+      const { result, waitForNextUpdate } = renderHook(() => 
+        useAboutInfo({ autoInit: true, initialConfig: mockConfig })
+      );
+      await waitForNextUpdate();
+
+      expect(result.current.appInfo).toBeTruthy();
+
+      act(() => {
+        result.current.reset();
+      });
+
+      expect(result.current.appInfo).toBeNull();
+      expect(result.current.loading).toBe(false);
+      expect(result.current.error).toBeNull();
+    });
+  });
+
+  describe('Memory Leak Prevention', () => {
+    it('should handle unmounted component', async () => {
+      const { result, unmount } = renderHook(() => useAboutInfo());
+
+      // Start initialization
+      const initPromise = act(async () => {
+        await result.current.initialize(mockConfig);
+      });
+
+      // Unmount before initialization completes
+      unmount();
+
+      // Should not throw error
+      await initPromise;
+    });
+
+    it('should handle update on unmounted component', async () => {
+      const { result, unmount, waitForNextUpdate } = renderHook(() => 
+        useAboutInfo({ autoInit: true, initialConfig: mockConfig })
+      );
+      await waitForNextUpdate();
+
+      unmount();
+
+      // Should not throw error
+      await act(async () => {
+        await result.current.updateAppInfo({ name: 'Updated App' });
+      });
+    });
+  });
+
+  describe('Console Logging', () => {
+    it('should log initialization in development', async () => {
+      const originalDev = global.__DEV__;
+      global.__DEV__ = true;
+
+      const { result } = renderHook(() => useAboutInfo());
+
+      await act(async () => {
+        await result.current.initialize(mockConfig);
+      });
+
+      expect(mockConsoleLog).toHaveBeenCalledWith('useAboutInfo: Initialized with config', mockConfig);
+
+      global.__DEV__ = originalDev;
+    });
+
+    it('should log errors in development', async () => {
+      const originalDev = global.__DEV__;
+      global.__DEV__ = true;
+
+      const { result } = renderHook(() => useAboutInfo());
+
+      await act(async () => {
+        await result.current.initialize(null as any);
+      });
+
+      expect(mockConsoleError).toHaveBeenCalledWith('useAboutInfo: Initialization failed', expect.any(Error));
+
+      global.__DEV__ = originalDev;
+    });
+  });
+});
