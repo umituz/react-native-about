@@ -1,6 +1,6 @@
 {
   "name": "react-native-about",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "description": "React Native About - General purpose package for hundreds of applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
