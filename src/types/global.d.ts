@@ -4,6 +4,8 @@ declare global {
   var __DEV__: boolean;
 }
 
+export {};
+
 declare namespace React {
   interface HTMLAttributes<T> extends DOMAttributes<T> {
     testID?: string;

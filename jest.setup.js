@@ -1,16 +1,17 @@
-// Mock React Native modules
+// Mock StyleSheet to avoid color processing issues
 jest.mock('react-native', () => ({
-  View: 'View',
-  Text: 'Text',
-  ScrollView: 'ScrollView',
-  TouchableOpacity: 'TouchableOpacity',
+  View: ({ children }) => children,
+  Text: ({ children }) => children,
+  ScrollView: ({ children }) => children,
+  TouchableOpacity: ({ children, onPress }) => ({ props: { children, onPress } }),
   StyleSheet: {
-    create: jest.fn(() => ({})),
+    create: (styles) => styles,
   },
   Linking: {
-    canOpenURL: jest.fn(),
-    openURL: jest.fn(),
+    canOpenURL: jest.fn(() => Promise.resolve(true)),
+    openURL: jest.fn(() => Promise.resolve()),
   },
+  processColor: (color) => color,
 }));
 
 // Mock console methods for testing

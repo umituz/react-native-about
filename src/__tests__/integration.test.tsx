@@ -2,6 +2,7 @@
  * Integration tests for the entire About package
  */
 /// <reference path="../types/global.d.ts" />
+/// <reference path="./types.d.ts" />
 import React from 'react';
 import { View, Text } from 'react-native';
 import { render, waitFor, fireEvent } from '@testing-library/react-native';

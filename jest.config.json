@@ -17,7 +17,13 @@
   },
   "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
   "testEnvironment": "jsdom",
+  "transformIgnorePatterns": [
+    "node_modules/(?!(react-native|@react-native|react-native-web|@testing-library)/)"
+  ],
   "moduleNameMapper": {
-    "^react-native$": "react-native-web"
-  }
+    "react-native": "react-native-web"
+  },
+  "testPathIgnorePatterns": [
+    "<rootDir>/src/__tests__/types.d.ts"
+  ]
 }

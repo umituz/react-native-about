@@ -1,6 +1,8 @@
 /**
  * Tests for utility functions
  */
+/// <reference path="../types/global.d.ts" />
+/// <reference path="./types.d.ts" />
 import {
   createDefaultConfig,
   validateConfig,

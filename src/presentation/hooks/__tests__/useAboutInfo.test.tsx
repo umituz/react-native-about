@@ -1,6 +1,8 @@
 /**
  * Tests for useAboutInfo hook
  */
+/// <reference path="../../../types/global.d.ts" />
+/// <reference path="../../__tests__/types.d.ts" />
 import { renderHook, act, waitFor } from '@testing-library/react-native';
 import { useAboutInfo } from '../useAboutInfo';
 import { AboutConfig } from '../../../domain/entities/AppInfo';
