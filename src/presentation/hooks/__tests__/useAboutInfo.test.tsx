@@ -1,9 +1,9 @@
 /**
  * Tests for useAboutInfo hook
  */
-import { renderHook, act } from '@testing-library/react-native';
+import { renderHook, act, waitFor } from '@testing-library/react-native';
 import { useAboutInfo } from '../useAboutInfo';
-import { AboutConfig } from '../../domain/entities/AppInfo';
+import { AboutConfig } from '../../../domain/entities/AppInfo';
 
 // Mock console methods
 const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
@@ -41,13 +41,15 @@ describe('useAboutInfo', () => {
     });
 
     it('should auto-initialize when autoInit is true', async () => {
-      const { result, waitForNextUpdate } = renderHook(() => 
+      const { result } = renderHook(() => 
         useAboutInfo({ autoInit: true, initialConfig: mockConfig })
       );
 
       expect(result.current.loading).toBe(true);
 
-      await waitForNextUpdate();
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false);
+      });
 
       expect(result.current.appInfo).toEqual({
         name: 'Test App',
@@ -78,7 +80,7 @@ describe('useAboutInfo', () => {
 
   describe('initialize', () => {
     it('should initialize with config', async () => {
-      const { result, waitForNextUpdate } = renderHook(() => useAboutInfo());
+      const { result } = renderHook(() => useAboutInfo());
 
       await act(async () => {
         await result.current.initialize(mockConfig);
@@ -101,7 +103,7 @@ describe('useAboutInfo', () => {
     });
 
     it('should not initialize multiple times', async () => {
-      const { result, waitForNextUpdate } = renderHook(() => useAboutInfo());
+      const { result } = renderHook(() => useAboutInfo());
 
       await act(async () => {
         await result.current.initialize(mockConfig);
@@ -133,10 +135,12 @@ describe('useAboutInfo', () => {
 
   describe('updateAppInfo', () => {
     beforeEach(async () => {
-      const { result, waitForNextUpdate } = renderHook(() => 
+      const { result } = renderHook(() => 
         useAboutInfo({ autoInit: true, initialConfig: mockConfig })
       );
-      await waitForNextUpdate();
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false);
+      });
     });
 
     it('should update app info', async () => {
@@ -172,10 +176,12 @@ describe('useAboutInfo', () => {
     });
 
     it('should handle update errors', async () => {
-      const { result, waitForNextUpdate } = renderHook(() => 
+      const { result } = renderHook(() => 
         useAboutInfo({ autoInit: true, initialConfig: mockConfig })
       );
-      await waitForNextUpdate();
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false);
+      });
 
       await act(async () => {
         await result.current.updateAppInfo(null as any);
@@ -187,10 +193,12 @@ describe('useAboutInfo', () => {
 
   describe('reset', () => {
     it('should reset state', async () => {
-      const { result, waitForNextUpdate } = renderHook(() => 
+      const { result } = renderHook(() => 
         useAboutInfo({ autoInit: true, initialConfig: mockConfig })
       );
-      await waitForNextUpdate();
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false);
+      });
 
       expect(result.current.appInfo).toBeTruthy();
 
@@ -221,10 +229,12 @@ describe('useAboutInfo', () => {
     });
 
     it('should handle update on unmounted component', async () => {
-      const { result, unmount, waitForNextUpdate } = renderHook(() => 
+      const { result, unmount } = renderHook(() => 
         useAboutInfo({ autoInit: true, initialConfig: mockConfig })
       );
-      await waitForNextUpdate();
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false);
+      });
 
       unmount();
 

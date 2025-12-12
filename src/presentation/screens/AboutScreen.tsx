@@ -11,6 +11,7 @@ import {
   StyleSheet,
   ScrollView,
   ViewStyle,
+  TextStyle,
 } from 'react-native';
 import { AboutHeader } from '../components/AboutHeader';
 import { AboutContent } from '../components/AboutContent';
@@ -25,9 +26,9 @@ export interface AboutScreenProps {
   /** Custom header style */
   headerStyle?: ViewStyle;
   /** Custom title style */
-  titleStyle?: ViewStyle;
+  titleStyle?: TextStyle;
   /** Custom version style */
-  versionStyle?: ViewStyle;
+  versionStyle?: TextStyle;
   /** Show app header with name and version */
   showHeader?: boolean;
   /** Custom header component */

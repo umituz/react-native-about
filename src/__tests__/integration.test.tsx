@@ -1,10 +1,12 @@
 /**
  * Integration tests for the entire About package
  */
+/// <reference path="../types/global.d.ts" />
 import React from 'react';
+import { View, Text } from 'react-native';
 import { render, waitFor, fireEvent } from '@testing-library/react-native';
-import { AboutScreen } from '../../presentation/screens/AboutScreen';
-import { AboutConfig } from '../../domain/entities/AppInfo';
+import { AboutScreen } from '../presentation/screens/AboutScreen';
+import { AboutConfig } from '../domain/entities/AppInfo';
 
 // Mock console methods
 const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
@@ -142,10 +144,10 @@ describe('About Package Integration', () => {
 
   describe('Custom Components', () => {
     it('should render custom header and footer', async () => {
-      const CustomHeader = () => <div testID="custom-header">Custom Header</div>;
-      const CustomFooter = () => <div testID="custom-footer">Custom Footer</div>;
+      const CustomHeader = () => <View testID="custom-header"><Text>Custom Header</Text></View>;
+      const CustomFooter = () => <View testID="custom-footer"><Text>Custom Footer</Text></View>;
 
-      const { getByTestId, queryByText } = render(
+      const { getByTestId, queryByText, getByText } = render(
         <AboutScreen 
           config={fullConfig} 
           headerComponent={<CustomHeader />}

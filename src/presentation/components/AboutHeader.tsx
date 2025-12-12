@@ -23,6 +23,8 @@ export interface AboutHeaderProps {
   versionStyle?: TextStyle;
   /** Custom description style */
   descriptionStyle?: TextStyle;
+  /** Test ID for testing */
+  testID?: string;
 }
 
 export const AboutHeader: React.FC<AboutHeaderProps> = ({
@@ -31,9 +33,10 @@ export const AboutHeader: React.FC<AboutHeaderProps> = ({
   titleStyle,
   versionStyle,
   descriptionStyle,
+  testID,
 }) => {
   return (
-    <View style={[styles.header, containerStyle]}>
+    <View style={[styles.header, containerStyle]} testID={testID}>
       <Text style={[styles.appName, titleStyle]}>{appInfo.name}</Text>
       <Text style={[styles.version, versionStyle]}>Version {appInfo.version}</Text>
       {appInfo.description && (

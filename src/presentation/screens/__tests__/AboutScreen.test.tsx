@@ -2,6 +2,7 @@
  * Tests for AboutScreen component
  */
 import React from 'react';
+import { View, Text, TextStyle } from 'react-native';
 import { render, waitFor } from '@testing-library/react-native';
 import { AboutScreen } from '../AboutScreen';
 import { AboutConfig } from '../../../domain/entities/AppInfo';
@@ -115,7 +116,7 @@ describe('AboutScreen', () => {
     });
 
     it('should render custom header component when provided', async () => {
-      const CustomHeader = () => <div testID="custom-header">Custom Header</div>;
+      const CustomHeader = () => <View testID="custom-header"><Text>Custom Header</Text></View>;
       
       const { getByTestId, queryByText } = render(
         <AboutScreen config={mockConfig} headerComponent={<CustomHeader />} />
@@ -130,7 +131,7 @@ describe('AboutScreen', () => {
     });
 
     it('should render custom footer component when provided', async () => {
-      const CustomFooter = () => <div testID="custom-footer">Custom Footer</div>;
+      const CustomFooter = () => <View testID="custom-footer"><Text>Custom Footer</Text></View>;
       
       const { getByTestId } = render(
         <AboutScreen config={mockConfig} footerComponent={<CustomFooter />} />
@@ -178,7 +179,7 @@ describe('AboutScreen', () => {
     });
 
     it('should apply custom title style', async () => {
-      const customStyle = { color: 'green' };
+      const customStyle: TextStyle = { color: 'green' };
       
       const { getByText } = render(
         <AboutScreen config={mockConfig} titleStyle={customStyle} />

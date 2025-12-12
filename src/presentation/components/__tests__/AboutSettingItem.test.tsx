@@ -2,6 +2,7 @@
  * Tests for AboutSettingItem component
  */
 import React from 'react';
+import { View } from 'react-native';
 import { render, fireEvent } from '@testing-library/react-native';
 import { AboutSettingItem } from '../AboutSettingItem';
 
@@ -44,7 +45,7 @@ describe('AboutSettingItem', () => {
     });
 
     it('should render with icon', () => {
-      const MockIcon = () => <div testID="mock-icon" />;
+      const MockIcon = () => <View testID="mock-icon" />;
       
       const { getByTestId } = render(
         <AboutSettingItem {...defaultProps} icon={<MockIcon />} />
@@ -200,7 +201,7 @@ describe('AboutSettingItem', () => {
 
     it('should apply custom icon container style', () => {
       const customStyle = { padding: 20 };
-      const MockIcon = () => <div testID="mock-icon" />;
+      const MockIcon = () => <View testID="mock-icon" />;
       
       const { getByTestId } = render(
         <AboutSettingItem {...defaultProps} icon={<MockIcon />} iconContainerStyle={customStyle} />

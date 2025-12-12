@@ -2,7 +2,7 @@
  * Tests for AboutRepository
  */
 import { AboutRepository } from '../AboutRepository';
-import { AppInfo } from '../../entities/AppInfo';
+import { AppInfo } from '../../../domain/entities/AppInfo';
 
 describe('AboutRepository', () => {
   let repository: AboutRepository;
