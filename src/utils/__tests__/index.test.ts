@@ -259,21 +259,25 @@ describe('Utils', () => {
     });
 
     it('should open valid URL in browser environment', async () => {
-      // Mock window object for browser environment
-      const originalWindow = global.window;
-      global.window = {
-        open: jest.fn(),
-      } as any;
+      // Mock window.open directly since jsdom already provides window
+      const originalOpen = window.open;
+      const mockOpen = jest.fn().mockReturnValue(true);
+      window.open = mockOpen;
 
       const result = await openUrl('https://example.com');
 
-      expect(global.window.open).toHaveBeenCalledWith('https://example.com', '_blank');
+      expect(mockOpen).toHaveBeenCalledWith('https://example.com', '_blank');
       expect(result).toBe(true);
 
-      global.window = originalWindow;
+      // Restore original
+      window.open = originalOpen;
     });
 
     it('should open valid URL in React Native environment', async () => {
+      // Remove window object to force React Native path
+      const originalWindow = global.window;
+      delete global.window;
+
       Linking.canOpenURL.mockResolvedValue(true);
       Linking.openURL.mockResolvedValue();
 
@@ -282,9 +286,15 @@ describe('Utils', () => {
       expect(Linking.canOpenURL).toHaveBeenCalledWith('https://example.com');
       expect(Linking.openURL).toHaveBeenCalledWith('https://example.com');
       expect(result).toBe(true);
+
+      global.window = originalWindow;
     });
 
     it('should handle URL that cannot be opened', async () => {
+      // Remove window object to force React Native path
+      const originalWindow = global.window;
+      delete global.window;
+
       Linking.canOpenURL.mockResolvedValue(false);
 
       const result = await openUrl('https://example.com');
@@ -292,9 +302,15 @@ describe('Utils', () => {
       expect(Linking.canOpenURL).toHaveBeenCalledWith('https://example.com');
       expect(Linking.openURL).not.toHaveBeenCalled();
       expect(result).toBe(false);
+
+      global.window = originalWindow;
     });
 
     it('should handle errors', async () => {
+      // Remove window object to force React Native path
+      const originalWindow = global.window;
+      delete global.window;
+
       Linking.canOpenURL.mockResolvedValue(true);
       Linking.openURL.mockRejectedValue(new Error('Failed to open'));
 
@@ -302,11 +318,17 @@ describe('Utils', () => {
 
       expect(result).toBe(false);
       expect(mockConsoleError).toHaveBeenCalledWith('Failed to open URL:', expect.any(Error));
+
+      global.window = originalWindow;
     });
 
     it('should log errors in development', async () => {
       const originalDev = global.__DEV__;
       global.__DEV__ = true;
+
+      // Remove window object to force React Native path
+      const originalWindow = global.window;
+      delete global.window;
 
       Linking.canOpenURL.mockResolvedValue(true);
       Linking.openURL.mockRejectedValue(new Error('Failed to open'));
@@ -316,6 +338,7 @@ describe('Utils', () => {
       expect(mockConsoleError).toHaveBeenCalledWith('Failed to open URL:', expect.any(Error));
 
       global.__DEV__ = originalDev;
+      global.window = originalWindow;
     });
   });
 

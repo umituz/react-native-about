@@ -2,7 +2,7 @@
  * Tests for AboutContent component
  */
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react-native';
+import { render, fireEvent } from '@testing-library/react';
 import { AboutContent } from '../AboutContent';
 import { AppInfo, AboutConfig } from '../../../domain/entities/AppInfo';
 

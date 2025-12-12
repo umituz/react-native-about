@@ -7,6 +7,9 @@
  * Create default configuration with overrides
  */
 export const createDefaultConfig = (overrides: Record<string, unknown> = {}) => {
+  if (!overrides || typeof overrides !== 'object') {
+    overrides = {};
+  }
   const overridesObj = overrides as Record<string, Record<string, unknown>>;
   return {
     appInfo: {
@@ -68,7 +71,22 @@ export const validateConfig = (config: unknown): boolean => {
  * Merge multiple configurations
  */
 export const mergeConfigs = (...configs: Record<string, unknown>[]) => {
-  return Object.assign({}, ...configs.filter(Boolean));
+  const result: Record<string, unknown> = {};
+  
+  for (const config of configs.filter(Boolean)) {
+    if (config && typeof config === 'object') {
+      for (const [key, value] of Object.entries(config)) {
+        if (value && typeof value === 'object' && !Array.isArray(value) && result[key] && typeof result[key] === 'object' && !Array.isArray(result[key])) {
+          // Deep merge for nested objects
+          result[key] = { ...result[key] as Record<string, unknown>, ...value as Record<string, unknown> };
+        } else {
+          result[key] = value;
+        }
+      }
+    }
+  }
+  
+  return result;
 };
 
 /**
@@ -76,7 +94,8 @@ export const mergeConfigs = (...configs: Record<string, unknown>[]) => {
  */
 export const isValidEmail = (email: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
+  // Additional check to prevent consecutive dots
+  return emailRegex.test(email) && !email.includes('..');
 };
 
 /**
@@ -84,8 +103,9 @@ export const isValidEmail = (email: string): boolean => {
  */
 export const isValidUrl = (url: string): boolean => {
   try {
-    new URL(url);
-    return true;
+    const urlObj = new URL(url);
+    // Only allow http and https protocols
+    return urlObj.protocol === 'http:' || urlObj.protocol === 'https:';
   } catch {
     return false;
   }
@@ -96,11 +116,13 @@ export const isValidUrl = (url: string): boolean => {
  */
 export const openUrl = async (url: string): Promise<boolean> => {
   try {
+    // Check if we're in a browser environment
     if (typeof window !== 'undefined' && window.open) {
       window.open(url, '_blank');
       return true;
     }
     
+    // React Native environment
     const { Linking } = await import('react-native');
     const canOpen = await Linking.canOpenURL(url);
     

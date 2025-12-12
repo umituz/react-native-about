@@ -23,6 +23,7 @@
   "moduleNameMapper": {
     "react-native": "react-native-web"
   },
+
   "testPathIgnorePatterns": [
     "<rootDir>/src/__tests__/types.d.ts"
   ]

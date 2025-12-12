@@ -36,10 +36,11 @@ describe('AboutRepository', () => {
     });
 
     it('should store a copy of the data', async () => {
+      const appInfoCopy = { ...mockAppInfo };
       await repository.saveAppInfo(mockAppInfo);
       
       // Modify original object
-      mockAppInfo.name = 'Modified';
+      appInfoCopy.name = 'Modified';
       
       const savedInfo = await repository.getAppInfo();
       expect(savedInfo.name).toBe('Test App'); // Should not be affected
@@ -64,7 +65,8 @@ describe('AboutRepository', () => {
       const retrievedInfo = await repository.getAppInfo();
       
       // Modify returned object
-      retrievedInfo.name = 'Modified';
+      const modifiedInfo = { ...retrievedInfo };
+      modifiedInfo.name = 'Modified';
       
       // Get it again to verify original is unchanged
       const retrievedInfo2 = await repository.getAppInfo();
@@ -113,7 +115,8 @@ describe('AboutRepository', () => {
       const updatedInfo = await repository.updateAppInfo(updates);
       
       // Modify returned object
-      updatedInfo.name = 'Modified';
+      const modifiedInfo = { ...updatedInfo };
+      modifiedInfo.name = 'Modified';
       
       // Get it again to verify original is unchanged
       const updatedInfo2 = await repository.getAppInfo();

@@ -2,7 +2,7 @@
  * Tests for AboutHeader component
  */
 import React from 'react';
-import { render } from '@testing-library/react-native';
+import { render } from '@testing-library/react';
 import { AboutHeader } from '../AboutHeader';
 import { AppInfo } from '../../../domain/entities/AppInfo';
 

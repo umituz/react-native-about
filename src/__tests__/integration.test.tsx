@@ -5,7 +5,7 @@
 /// <reference path="./types.d.ts" />
 import React from 'react';
 import { View, Text } from 'react-native';
-import { render, waitFor, fireEvent } from '@testing-library/react-native';
+import { render, waitFor, fireEvent } from '@testing-library/react';
 import { AboutScreen } from '../presentation/screens/AboutScreen';
 import { AboutConfig } from '../domain/entities/AppInfo';
 
