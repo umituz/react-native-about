@@ -56,4 +56,16 @@ export interface AboutConfig {
     onTermsPress?: () => void;
     onMoreAppsPress?: () => void;
   };
+  /** Localized texts for section headers and labels */
+  texts?: {
+    contact?: string;
+    more?: string;
+    legal?: string;
+    developer?: string;
+    email?: string;
+    website?: string;
+    moreApps?: string;
+    privacyPolicy?: string;
+    termsOfService?: string;
+  };
 }
