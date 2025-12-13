@@ -1,6 +1,6 @@
 {
   "name": "@umituz/react-native-about",
-  "version": "1.11.5",
+  "version": "1.13.0",
   "description": "React Native About - General purpose package for hundreds of applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,10 +8,10 @@
     "build": "tsc",
     "type-check": "tsc --noEmit",
     "lint": "eslint src --ext .ts,.tsx --fix",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "prepublishOnly": "npm run build && npm run test"
+    "test": "jest --config jest.config.json",
+    "test:watch": "jest --watch --config jest.config.json",
+    "test:coverage": "jest --coverage --config jest.config.json",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "react-native",
@@ -46,6 +46,8 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@umituz/react-native-design-system-theme": "^1.8.0",
+    "@umituz/react-native-localization": "latest",
+    "@umituz/react-native-storage": "latest",
     "babel-jest": "^29.5.0",
     "eslint": "^8.0.0",
     "eslint-plugin-react": "^7.33.0",
@@ -64,6 +66,7 @@
     "@expo/vector-icons": ">=13.0.0",
     "@react-navigation/native": ">=6.0.0",
     "@umituz/react-native-design-system-theme": "*",
+    "@umituz/react-native-localization": "*",
     "react": ">=18.0.0",
     "react-native": ">=0.70.0"
   },

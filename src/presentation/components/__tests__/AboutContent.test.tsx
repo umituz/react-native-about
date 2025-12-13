@@ -4,7 +4,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { AboutContent } from '../AboutContent';
-import { AppInfo, AboutConfig } from '../../../domain/entities/AppInfo';
+import { AppInfo, AboutSection } from '../AboutContent';
 
 describe('AboutContent', () => {
   const mockAppInfo: AppInfo = {

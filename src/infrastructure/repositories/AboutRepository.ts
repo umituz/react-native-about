@@ -35,10 +35,6 @@ export class AboutRepository implements IAboutRepository {
     
     // Store a deep copy to prevent external mutations
     this.appInfo = { ...appInfo };
-    
-    if (__DEV__) {
-      console.log('AboutRepository: App info saved', appInfo);
-    }
   }
 
   async updateAppInfo(updates: Partial<AppInfo>): Promise<AppInfo> {
@@ -57,11 +53,7 @@ export class AboutRepository implements IAboutRepository {
     
     // Create new object to prevent mutations
     this.appInfo = { ...this.appInfo, ...updates };
-    
-    if (__DEV__) {
-      console.log('AboutRepository: App info updated', updates);
-    }
-    
+
     // Return a deep copy to prevent mutations
     return { ...this.appInfo };
   }
@@ -72,9 +64,5 @@ export class AboutRepository implements IAboutRepository {
   destroy(): void {
     this.appInfo = null;
     this.isDestroyed = true;
-    
-    if (__DEV__) {
-      console.log('AboutRepository: Destroyed');
-    }
   }
 }

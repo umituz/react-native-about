@@ -79,10 +79,6 @@ export const useAboutInfo = (
         setAppInfo(defaultAppInfo);
         isInitializedRef.current = true;
       }
-
-      if (__DEV__) {
-        console.log('useAboutInfo: Initialized with config', config);
-      }
     } catch (err) {
       if (!isMountedRef.current) {
         return;
@@ -90,10 +86,6 @@ export const useAboutInfo = (
 
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(errorMessage);
-
-      if (__DEV__) {
-        console.error('useAboutInfo: Initialization failed', err);
-      }
     } finally {
       // Only update loading state if component is still mounted
       if (isMountedRef.current) {
@@ -128,10 +120,6 @@ export const useAboutInfo = (
       if (isMountedRef.current) {
         setAppInfo(updatedAppInfo);
       }
-
-      if (__DEV__) {
-        console.log('useAboutInfo: Updated with config', config);
-      }
     } catch (err) {
       if (!isMountedRef.current) {
         return;
@@ -139,10 +127,6 @@ export const useAboutInfo = (
 
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(errorMessage);
-
-      if (__DEV__) {
-        console.error('useAboutInfo: Update failed', err);
-      }
     } finally {
       // Only update loading state if component is still mounted
       if (isMountedRef.current) {
@@ -169,10 +153,6 @@ export const useAboutInfo = (
       if (isMountedRef.current) {
         setAppInfo(updatedInfo);
       }
-
-      if (__DEV__) {
-        console.log('useAboutInfo: Updated app info', updates);
-      }
     } catch (err) {
       if (!isMountedRef.current) {
         return;
@@ -180,10 +160,6 @@ export const useAboutInfo = (
 
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(errorMessage);
-
-      if (__DEV__) {
-        console.error('useAboutInfo: Update failed', err);
-      }
     } finally {
       // Only update loading state if component is still mounted
       if (isMountedRef.current) {
@@ -207,10 +183,6 @@ export const useAboutInfo = (
       if (isMountedRef.current) {
         setAppInfo(refreshedInfo);
       }
-
-      if (__DEV__) {
-        console.log('useAboutInfo: Refreshed app info');
-      }
     } catch (err) {
       if (!isMountedRef.current) {
         return;
@@ -218,10 +190,6 @@ export const useAboutInfo = (
 
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(errorMessage);
-
-      if (__DEV__) {
-        console.error('useAboutInfo: Refresh failed', err);
-      }
     } finally {
       // Only update loading state if component is still mounted
       if (isMountedRef.current) {

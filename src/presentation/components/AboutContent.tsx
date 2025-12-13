@@ -8,6 +8,8 @@ import { AboutSettingItem } from './AboutSettingItem';
 import { AppInfo } from '../../domain/entities/AppInfo';
 import { AboutConfig } from '../../domain/entities/AppInfo';
 
+import { useAppDesignTokens } from '@umituz/react-native-design-system-theme';
+
 export interface AboutContentProps {
   /** App information to display */
   appInfo: AppInfo;
@@ -15,9 +17,14 @@ export interface AboutContentProps {
   config: AboutConfig;
 }
 
-const AboutSectionHeader: React.FC<{ title: string }> = ({ title }) => (
-  <Text style={styles.sectionHeader}>{title}</Text>
-);
+const AboutSectionHeader: React.FC<{ title: string }> = ({ title }) => {
+  const tokens = useAppDesignTokens();
+  const colors = tokens.colors;
+
+  return (
+    <Text style={[styles.sectionHeader, { color: colors.textSecondary }]}>{title}</Text>
+  );
+};
 
 export const AboutContent: React.FC<AboutContentProps> = ({
   appInfo,
@@ -89,7 +96,6 @@ const styles = StyleSheet.create({
   sectionHeader: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#666',
     marginBottom: 8,
     paddingHorizontal: 16,
     textTransform: 'uppercase',

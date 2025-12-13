@@ -27,6 +27,8 @@ export interface AboutHeaderProps {
   testID?: string;
 }
 
+import { useAppDesignTokens } from '@umituz/react-native-design-system-theme';
+
 export const AboutHeader: React.FC<AboutHeaderProps> = ({
   appInfo,
   containerStyle,
@@ -35,12 +37,15 @@ export const AboutHeader: React.FC<AboutHeaderProps> = ({
   descriptionStyle,
   testID,
 }) => {
+  const tokens = useAppDesignTokens();
+  const colors = tokens.colors;
+
   return (
-    <View style={[styles.header, containerStyle]} testID={testID}>
-      <Text style={[styles.appName, titleStyle]}>{appInfo.name}</Text>
-      <Text style={[styles.version, versionStyle]}>Version {appInfo.version}</Text>
+    <View style={[styles.header, { borderBottomColor: colors.border }, containerStyle]} testID={testID}>
+      <Text style={[styles.appName, { color: colors.textPrimary }, titleStyle]}>{appInfo.name}</Text>
+      <Text style={[styles.version, { color: colors.textSecondary }, versionStyle]}>Version {appInfo.version}</Text>
       {appInfo.description && (
-        <Text style={[styles.description, descriptionStyle]}>
+        <Text style={[styles.description, { color: colors.textSecondary }, descriptionStyle]}>
           {appInfo.description}
         </Text>
       )}
@@ -54,22 +59,18 @@ const styles = StyleSheet.create({
     paddingVertical: 24,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#e5e5e5',
   },
   appName: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#000',
     marginBottom: 4,
   },
   version: {
     fontSize: 16,
-    color: '#666',
     marginBottom: 8,
   },
   description: {
     fontSize: 14,
-    color: '#666',
     textAlign: 'center',
     lineHeight: 20,
   },

@@ -3,6 +3,7 @@ import { View, Text, Pressable, StyleSheet, ViewStyle } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useAppDesignTokens } from '@umituz/react-native-design-system-theme';
+import { useLocalization } from '@umituz/react-native-localization';
 import { AboutConfig } from '../../domain/entities/AppInfo';
 
 export interface AboutSectionProps {
@@ -18,11 +19,12 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
 }) => {
     const navigation = useNavigation();
     const tokens = useAppDesignTokens();
+    const { t } = useLocalization();
     const colors = tokens.colors;
 
     const route = config?.route || config?.defaultRoute || 'About';
-    const title = config?.title || 'About';
-    const description = config?.description || 'App information and version';
+    const title = config?.title || t('settings.about.title');
+    const description = config?.description || t('settings.about.description');
 
     const handlePress = () => {
         if (onPress) {
@@ -34,7 +36,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
 
     return (
         <View style={[styles.sectionContainer, { backgroundColor: colors.surface }, containerStyle]}>
-            <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>About</Text>
+            <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>{t('settings.about.title')}</Text>
             <Pressable
                 style={({ pressed }) => [
                     styles.itemContainer,

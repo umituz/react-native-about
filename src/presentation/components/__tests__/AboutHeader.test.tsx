@@ -72,7 +72,7 @@ describe('AboutHeader', () => {
   describe('Custom Styles', () => {
     it('should apply custom container style', () => {
       const customStyle = { backgroundColor: 'red' };
-      
+
       const { getByTestId } = render(
         <AboutHeader appInfo={mockAppInfo} containerStyle={customStyle} testID="header" />
       );
@@ -83,7 +83,7 @@ describe('AboutHeader', () => {
 
     it('should apply custom title style', () => {
       const customStyle = { color: 'blue' };
-      
+
       const { getByText } = render(
         <AboutHeader appInfo={mockAppInfo} titleStyle={customStyle} />
       );
@@ -94,7 +94,7 @@ describe('AboutHeader', () => {
 
     it('should apply custom version style', () => {
       const customStyle = { color: 'purple' };
-      
+
       const { getByText } = render(
         <AboutHeader appInfo={mockAppInfo} versionStyle={customStyle} />
       );
@@ -105,7 +105,7 @@ describe('AboutHeader', () => {
 
     it('should apply custom description style', () => {
       const customStyle = { color: 'green' };
-      
+
       const { getByText } = render(
         <AboutHeader appInfo={mockAppInfo} descriptionStyle={customStyle} />
       );
@@ -168,7 +168,7 @@ describe('AboutHeader', () => {
     it('should handle very long text', () => {
       const longName = 'A'.repeat(100);
       const longDescription = 'B'.repeat(200);
-      
+
       const appInfoWithLongText: AppInfo = {
         name: longName,
         version: '1.0.0',

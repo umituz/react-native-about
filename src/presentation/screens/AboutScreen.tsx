@@ -15,7 +15,6 @@ import {
 } from 'react-native';
 import { AboutHeader } from '../components/AboutHeader';
 import { AboutContent } from '../components/AboutContent';
-import { useAboutInfo } from '../hooks/useAboutInfo';
 import { AboutConfig } from '../../domain/entities/AppInfo';
 
 export interface AboutScreenProps {
@@ -39,6 +38,9 @@ export interface AboutScreenProps {
   testID?: string;
 }
 
+import { useAboutInfo } from '../hooks/useAboutInfo';
+import { useAppDesignTokens } from '@umituz/react-native-design-system-theme';
+
 export const AboutScreen: React.FC<AboutScreenProps> = ({
   config,
   containerStyle,
@@ -50,6 +52,9 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({
   footerComponent,
   testID,
 }) => {
+  const tokens = useAppDesignTokens();
+  const colors = tokens.colors;
+
   const { appInfo, loading, error } = useAboutInfo({
     autoInit: true,
     initialConfig: config,
@@ -82,11 +87,11 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({
     }
 
     return (
-      <View style={styles.footer}>
+      <View style={[styles.footer, { borderTopColor: colors.border }]}>
         {footerComponent}
       </View>
     );
-  }, [footerComponent]);
+  }, [footerComponent, colors.border]);
 
   // Memoize content rendering
   const renderContent = useCallback(() => {
@@ -104,13 +109,17 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({
 
   // Memoize container style to prevent unnecessary re-renders
   const containerStyles = useMemo(() => {
-    return [styles.container, containerStyle];
-  }, [containerStyle]);
+    return [
+      styles.container,
+      { backgroundColor: colors.background },
+      containerStyle
+    ];
+  }, [containerStyle, colors.background]);
 
   if (loading) {
     return (
       <View style={containerStyles} testID={testID}>
-        <Text style={styles.loadingText}>Loading...</Text>
+        <Text style={[styles.loadingText, { color: colors.textSecondary }]}>Loading...</Text>
       </View>
     );
   }
@@ -118,7 +127,7 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({
   if (error) {
     return (
       <View style={containerStyles} testID={testID}>
-        <Text style={styles.errorText}>Error: {error}</Text>
+        <Text style={[styles.errorText, { color: colors.error }]}>Error: {error}</Text>
       </View>
     );
   }
@@ -126,15 +135,16 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({
   if (!appInfo) {
     return (
       <View style={containerStyles} testID={testID}>
-        <Text style={styles.errorText}>No app information available</Text>
+        <Text style={[styles.errorText, { color: colors.textSecondary }]}>No app information available</Text>
       </View>
     );
   }
 
   return (
-    <ScrollView 
+    <ScrollView
       style={containerStyles}
       testID={testID}
+      contentContainerStyle={{ paddingBottom: 32 }}
     >
       {renderHeader()}
       {renderContent()}
@@ -146,24 +156,20 @@ export const AboutScreen: React.FC<AboutScreenProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
   footer: {
     paddingVertical: 16,
     paddingHorizontal: 16,
     borderTopWidth: 1,
-    borderTopColor: '#e5e5e5',
   },
   loadingText: {
     textAlign: 'center',
     fontSize: 16,
-    color: '#666',
     marginTop: 20,
   },
   errorText: {
     textAlign: 'center',
     fontSize: 16,
-    color: '#ff0000',
     marginTop: 20,
   },
 });

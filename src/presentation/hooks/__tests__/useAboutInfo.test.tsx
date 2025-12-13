@@ -6,10 +6,6 @@ import { renderHook, act, waitFor } from '@testing-library/react';
 import { useAboutInfo } from '../useAboutInfo';
 import { AboutConfig } from '../../../domain/entities/AppInfo';
 
-// Mock console methods
-const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
-const mockConsoleError = jest.spyOn(console, 'error').mockImplementation();
-
 describe('useAboutInfo', () => {
   const mockConfig: AboutConfig = {
     appInfo: {
@@ -22,11 +18,6 @@ describe('useAboutInfo', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-  });
-
-  afterEach(() => {
-    mockConsoleLog.mockClear();
-    mockConsoleError.mockClear();
   });
 
   describe('Initial State', () => {
@@ -246,35 +237,4 @@ describe('useAboutInfo', () => {
     });
   });
 
-  describe('Console Logging', () => {
-    it('should log initialization in development', async () => {
-      const originalDev = global.__DEV__;
-      global.__DEV__ = true;
-
-      const { result } = renderHook(() => useAboutInfo());
-
-      await act(async () => {
-        await result.current.initialize(mockConfig);
-      });
-
-      expect(mockConsoleLog).toHaveBeenCalledWith('useAboutInfo: Initialized with config', mockConfig);
-
-      global.__DEV__ = originalDev;
-    });
-
-    it('should log errors in development', async () => {
-      const originalDev = global.__DEV__;
-      global.__DEV__ = true;
-
-      const { result } = renderHook(() => useAboutInfo());
-
-      await act(async () => {
-        await result.current.initialize(null as unknown);
-      });
-
-      expect(mockConsoleError).toHaveBeenCalledWith('useAboutInfo: Initialization failed', expect.any(Error));
-
-      global.__DEV__ = originalDev;
-    });
-  });
 });

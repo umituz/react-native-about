@@ -45,6 +45,8 @@ export interface AboutSettingItemProps {
   chevronColor?: string;
 }
 
+import { useAppDesignTokens } from '@umituz/react-native-design-system-theme';
+
 export const AboutSettingItem: React.FC<AboutSettingItemProps> = ({
   icon,
   title,
@@ -59,8 +61,11 @@ export const AboutSettingItem: React.FC<AboutSettingItemProps> = ({
   iconContainerStyle,
   disabled = false,
   testID,
-  chevronColor = '#666',
+  chevronColor,
 }) => {
+  const tokens = useAppDesignTokens();
+  const colors = tokens.colors;
+
   // Memoize container type to prevent unnecessary re-renders
   const Container = useMemo(() => {
     return onPress ? TouchableOpacity : View;
@@ -70,10 +75,11 @@ export const AboutSettingItem: React.FC<AboutSettingItemProps> = ({
   const containerStyles = useMemo(() => {
     return [
       styles.container,
+      { backgroundColor: colors.surface },
       disabled && styles.disabled,
       containerStyle
     ];
-  }, [disabled, containerStyle]);
+  }, [disabled, containerStyle, colors.surface]);
 
   // Memoize icon container styles
   const iconContainerStyles = useMemo(() => {
@@ -87,9 +93,9 @@ export const AboutSettingItem: React.FC<AboutSettingItemProps> = ({
   const chevronStyles = useMemo(() => {
     return [
       styles.chevron,
-      { color: chevronColor }
+      { color: chevronColor || colors.textSecondary }
     ];
-  }, [chevronColor]);
+  }, [chevronColor, colors.textSecondary]);
 
   // Memoize press handler to prevent unnecessary re-renders
   const handlePress = useCallback(() => {
@@ -115,15 +121,15 @@ export const AboutSettingItem: React.FC<AboutSettingItemProps> = ({
   const renderContent = useMemo(() => {
     return (
       <View style={styles.content}>
-        <Text style={[styles.title, titleStyle]}>{title}</Text>
+        <Text style={[styles.title, { color: colors.textPrimary }, titleStyle]}>{title}</Text>
         {description && (
-          <Text style={[styles.description, descriptionStyle]}>
+          <Text style={[styles.description, { color: colors.textSecondary }, descriptionStyle]}>
             {description}
           </Text>
         )}
       </View>
     );
-  }, [title, description, titleStyle, descriptionStyle]);
+  }, [title, description, titleStyle, descriptionStyle, colors.textPrimary, colors.textSecondary]);
 
   // Memoize value rendering
   const renderValue = useMemo(() => {
@@ -132,9 +138,9 @@ export const AboutSettingItem: React.FC<AboutSettingItemProps> = ({
     }
 
     return (
-      <Text style={[styles.value, valueStyle]}>{value}</Text>
+      <Text style={[styles.value, { color: colors.textSecondary }, valueStyle]}>{value}</Text>
     );
-  }, [value, valueStyle]);
+  }, [value, valueStyle, colors.textSecondary]);
 
   // Memoize chevron rendering
   const renderChevron = useMemo(() => {
@@ -168,7 +174,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     paddingHorizontal: 16,
-    backgroundColor: 'transparent',
   },
   disabled: {
     opacity: 0.5,
@@ -184,16 +189,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#000',
   },
   description: {
     fontSize: 14,
-    color: '#666',
     marginTop: 2,
   },
   value: {
     fontSize: 16,
-    color: '#666',
     marginRight: 8,
   },
   chevron: {
